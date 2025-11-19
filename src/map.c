@@ -3,5 +3,5 @@
 
 create_map(char *map)
 {
-	t_map
+	t_map	map
 }
