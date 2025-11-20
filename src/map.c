@@ -8,7 +8,7 @@ void	create_map(char *file)
 	t_map	map;
 	int		fd;
 
-	map = ft_calloc(sizeof(t_map));
+	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
 		error_and_exit("Error. Memory allocation failed\n", &map);
 	fd = open(file, O_RDONLY);
@@ -21,7 +21,7 @@ void	create_map(char *file)
 	getmapsize(&map, fd);
 	create_grid(&map, file);
 	validate_grid(&map);
-	valid_path(&map);
+	validate_path(&map);
 }
 
 void	create_grid(t_map *map, char *file)
@@ -48,10 +48,34 @@ void	create_grid(t_map *map, char *file)
 	close(fd);
 }
 
-void	valid_path(t_map *map)
+void	validate_path(t_map *map)
 {
-//copy map
-//flood fill
+	t_map	copy;
+
+	copy.y = -1;
+	copy = ft_calloc(1, sizeof(t_map));
+	if (!copy)
+		error_and_exit("Error. Memory allocation failed\n", map);
+	while (++copy.y < map->height)
+	{
+		copy.grid[copy.y] = ft_strdup(map->grid[copy.y]);
+		if (!copy.grid[copy.y])
+			error_and_exit("Error. Strdup failure\n", map);
+	}
+	copy.grid[copy.y] = '\0';
+	flood_fill(&copy);
+	copy.y = -1;
+	while (++copy.y < map->height)
+	{
+		copy.x = -1;
+		while (++copy.x < ft_strlen(copy.grid[copy.y]))
+		{
+			if (copy.grid[copy.y][copy.x] != '1'
+				|| copy.grid[copy.y][copy.x] != 'F')
+				error_and_exit("Error. No valid path\n", copy);
+		}
+	}
+	//free copy
 }
 
 void	validate_grid(t_map *map)

@@ -57,3 +57,14 @@ void	count_elements(t_map *map)
 		}
 	}
 }
+
+void	flood_fill(t_map *copy, int x, int y)
+{
+	if (copy->grid[y][x] == 'F' || copy->grid[y][x] == '1')
+		return ;
+	copy->grid[y][x] = 'F';
+	flood_fill(copy, x - 1, y);
+	flood_fill(copy, x + 1, y);
+	flood_fill(copy, x, y - 1);
+	flood_fill(copy, x, y + 1);
+}
