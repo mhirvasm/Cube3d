@@ -14,18 +14,47 @@ void	getmapsize(t_map *map, int fd)
 	close(fd);
 }
 
+void	wall_helper(t_map *map)
+{
+	while (map->grid[map->y][map->x] == ' ')
+	{
+		if (map->y == 0 && (map->grid[map->y + 1][map->x] != ' '
+			|| map->grid[map->y + 1][map->x] != '1'))
+			error_and_exit("Error. Map not enclosed\n", map);
+		else if (map->y == map->height && (map->grid[map->y - 1][map->x] != ' '
+			|| map->grid[map->y - 1][map->x] != '1'))
+			error_and_exit("Error. Map not enclosed\n", map);
+		else if (map->y != 0 && map->y != map->height
+			&& ((map->grid[map->y - 1][map->x] != ' '
+			|| map->grid[map->y - 1][map->x] != '1')
+			|| (map->grid[map->y + 1][map->x] != ' '
+			|| map->grid[map->y + 1][map->x] != '1')))
+		else if ((map->y == 0 && map->grid[map->y + 1][map->x] == '1'
+			&& map->grid[map->y + 1][map->x + 1] != '1')
+			|| (map->y == map->height && map->grid[map->y - 1][map->x] == '1'
+			&& map->grid[map->y - 1][map->x - 1] != '1')
+			|| (map-y != 0 && map->y != map->height
+			&& map->grid[map->y - 1][map->x] == '1'
+			&& map->grid[map->y - 1][map->x + 1] != '1'
+			&& map->grid[map->y + 1][map->x] == '1'
+			&& map->grid[map->y + 1][map->x + 1] != '1'))
+			error_and_exit("Error. Map not enclosed\n", map);
+		map->x++;
+	}
+}
+
 void	validate_elements(t_map *map)
 {
 	if ((map->y == 0 || map->y == map->height)
-		&& map->grid[map->y][map->x] != '1')
+		&& (map->grid[map->y][map->x] != '1'
+		|| map->grid[map->y][map->x] != ' '))
 		error_and_exit("Error. Map not enclosed\n", map);
 	if (map->grid[map->y][map->x] != '1'
 		|| map->grid[map->y][map->x] != '0'
 		|| map->grid[map->y][map->x] != 'N'
 		|| map->grid[map->y][map->x] != 'W'
 		|| map->grid[map->y][map->x] != 'E'
-		|| map->grid[map->y][map->x] != 'S'
-		|| map->grid[map->y][map->x] != ' ')
+		|| map->grid[map->y][map->x] != 'S')
 		error_and_exit("Error. Invalid elements\n", map);
 	if ((map->grid[map->y][map->x - 1] == ' '
 		&& (map->grid[map->y][map->x] != ' '

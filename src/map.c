@@ -86,8 +86,7 @@ void	validate_grid(t_map *map)
 		map->x = -1;
 		while (++map->x < ft_strlen(map.grid[map->y] - 1))
 		{
-			while (map->grid[map->y][map->x] == ' ')
-				map->x++;
+			wall_helper(map);
 			validate_elements(map);
 		}
 	}
