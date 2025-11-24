@@ -5,11 +5,11 @@ void	getmapsize(t_map *map, int fd)
 {
 	while (1)
 	{
-		map.line = get_next_line(fd);
-		if (!map.line)
+		map->line = get_next_line(fd);
+		if (!map->line)
 			break ;
-		map.height++;
-		free(map.line);
+		map->height++;
+		free(map->line);
 	}
 	close(fd);
 }
@@ -31,9 +31,9 @@ void	wall_helper(t_map *map)
 			|| map->grid[map->y + 1][map->x] != '1')))
 		else if ((map->y == 0 && map->grid[map->y + 1][map->x] == '1'
 			&& map->grid[map->y + 1][map->x + 1] != '1')
-			|| (map->y == map->height && map->grid[map->y - 1][map->x] == '1'
+			|| (map->y == map->height - 1 && map->grid[map->y - 1][map->x] == '1'
 			&& map->grid[map->y - 1][map->x - 1] != '1')
-			|| (map-y != 0 && map->y != map->height
+			|| (map->y != 0 && map->y != map->height - 1
 			&& map->grid[map->y - 1][map->x] == '1'
 			&& map->grid[map->y - 1][map->x + 1] != '1'
 			&& map->grid[map->y + 1][map->x] == '1'
@@ -59,7 +59,7 @@ void	validate_elements(t_map *map)
 	if ((map->grid[map->y][map->x - 1] == ' '
 		&& (map->grid[map->y][map->x] != ' '
 		|| map->grid[map->y][map->x] != '1'))
-		|| map->grid[map->y][ft_strlen(map->grid) - 1] != '1'
+		|| map->grid[map->y][ft_strlen(*map->grid) - 1] != '1'
 		|| (map->x == 0 && map->grid[map->y][map->x] != ' '
 		&& map->grid[map->y][map->x] != '1'))
 		error_and_exit("Error. Map not enclosed\n", map);
@@ -72,7 +72,7 @@ void	count_elements(t_map *map)
 	while (++map->y < map->height)
 	{
 		map->x = -1;
-		while (++map->x < ft_strlen(map.grid[map->y] - 1))
+		while (++map->x < ft_strlen(map->grid[map->y] - 1))
 		{
 			if (map->grid[map->y][map->x] == 'N'
 				|| map->grid[map->y][map->x] == 'S'
@@ -87,7 +87,7 @@ void	count_elements(t_map *map)
 	}
 }
 
-void	flood_fill(t_map *copy, int x, int y)
+void	flood_fill(t_map *copy, size_t x, size_t y)
 {
 	if (copy->grid[y][x] == 'F' || copy->grid[y][x] == '1')
 		return ;

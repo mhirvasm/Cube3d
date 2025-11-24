@@ -5,23 +5,23 @@
 
 void	create_map(char *file)
 {
-	t_map	map;
+	t_map	*map;
 	int		fd;
 
 	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
-		error_and_exit("Error. Memory allocation failed\n", &map);
+		error_and_exit("Error. Memory allocation failed\n", map);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file\n", &map);
-	map.line = get_next_line(fd);
-	map.width = ft_strlen(line - 1);
-	map.height = 1;
-	free(map.line);
-	getmapsize(&map, fd);
-	create_grid(&map, file);
-	validate_grid(&map);
-	validate_path(&map);
+		error_and_exit("Error. Invalid file\n", map);
+	map->line = get_next_line(fd);
+	map->width = ft_strlen(map->line - 1);
+	map->height = 1;
+	free(map->line);
+	getmapsize(map, fd);
+	create_grid(map, file);
+	validate_grid(map);
+	validate_path(map);
 }
 
 void	create_grid(t_map *map, char *file)
@@ -41,41 +41,41 @@ void	create_grid(t_map *map, char *file)
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
 			error_and_exit("Error. Strdup failure\n", map);
-		map->grid[map->y][ft_strlen(map->grid) - 1] = '\0';
+		map->grid[map->y][ft_strlen(*map->grid) - 1] = '\0';
 		free(map->line);
 	}
-	map->grid[map->y] = '\0';
+	map->grid[map->y] = NULL;
 	close(fd);
 }
 
 void	validate_path(t_map *map)
 {
-	t_map	copy;
+	t_map	*copy;
 
-	copy.y = -1;
 	copy = ft_calloc(1, sizeof(t_map));
 	if (!copy)
 		error_and_exit("Error. Memory allocation failed\n", map);
-	while (++copy.y < map->height)
+	copy->y = -1;
+	while (++copy->y < map->height)
 	{
-		copy.grid[copy.y] = ft_strdup(map->grid[copy.y]);
-		if (!copy.grid[copy.y])
+		copy->grid[copy->y] = ft_strdup(map->grid[copy->y]);
+		if (!copy->grid[copy->y])
 			error_and_exit("Error. Strdup failure\n", map);
 	}
-	copy.grid[copy.y] = '\0';
-	flood_fill(&copy);
-	copy.y = -1;
-	while (++copy.y < map->height)
+	copy->grid[copy->y] = NULL;
+	flood_fill(copy, map->playerx, map->playery);
+	copy->y = -1;
+	while (++copy->y < map->height)
 	{
-		copy.x = -1;
-		while (++copy.x < ft_strlen(copy.grid[copy.y]))
+		copy->x = -1;
+		while (++copy->x < ft_strlen(copy->grid[copy->y]))
 		{
-			if (copy.grid[copy.y][copy.x] != '1'
-				|| copy.grid[copy.y][copy.x] != 'F')
+			if (copy->grid[copy->y][copy->x] != '1'
+				|| copy->grid[copy->y][copy->x] != 'F')
 				error_and_exit("Error. No valid path\n", copy);
 		}
 	}
-	//free copy
+	free_map(copy);
 }
 
 void	validate_grid(t_map *map)
@@ -84,7 +84,7 @@ void	validate_grid(t_map *map)
 	while (++map->y < map->height)
 	{
 		map->x = -1;
-		while (++map->x < ft_strlen(map.grid[map->y] - 1))
+		while (++map->x < ft_strlen(map->grid[map->y] - 1))
 		{
 			wall_helper(map);
 			validate_elements(map);

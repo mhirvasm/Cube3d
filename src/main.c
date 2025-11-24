@@ -4,9 +4,9 @@
 int	main(int argc, char **argv)
 {
 	if (argc != 2)
-		error_and_exit("Error. Incorrect number of arguments\n");
-	if (check_extension(argv[1]);
-		error_and_exit("Error. Incorrect map format\n");
+		error("Error. Incorrect number of arguments");
+	if (check_extension(argv[1]))
+		error("Error. Incorrect map format");
 	create_map(argv[1]);
 	//launch game
 	//mlx hook
