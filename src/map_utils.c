@@ -20,16 +20,16 @@ void	wall_helper(t_map *map)
 	{
 		if (map->y == 0 && (map->grid[map->y + 1][map->x] != ' '
 			|| map->grid[map->y + 1][map->x] != '1'))
-			error_and_exit("Error. Map not enclosed\n", map);
-		else if (map->y == map->height && (map->grid[map->y - 1][map->x] != ' '
+			error_and_exit("Error. Map not enclosed", map);
+		if (map->y == map->height - 1 && (map->grid[map->y - 1][map->x] != ' '
 			|| map->grid[map->y - 1][map->x] != '1'))
-			error_and_exit("Error. Map not enclosed\n", map);
-		else if (map->y != 0 && map->y != map->height
-			&& ((map->grid[map->y - 1][map->x] != ' '
-			|| map->grid[map->y - 1][map->x] != '1')
-			|| (map->grid[map->y + 1][map->x] != ' '
-			|| map->grid[map->y + 1][map->x] != '1')))
-		else if ((map->y == 0 && map->grid[map->y + 1][map->x] == '1'
+			error_and_exit("Error. Map not enclosed", map);
+		if ((map->y != 0 && map->y != map->height - 1
+			&& map->grid[map->y - 1][map->x] != ' ')
+			|| map->grid[map->y - 1][map->x] != '1'
+			|| map->grid[map->y + 1][map->x] != ' '
+			|| map->grid[map->y + 1][map->x] != '1')
+		if ((map->y == 0 && map->grid[map->y + 1][map->x] == '1'
 			&& map->grid[map->y + 1][map->x + 1] != '1')
 			|| (map->y == map->height - 1 && map->grid[map->y - 1][map->x] == '1'
 			&& map->grid[map->y - 1][map->x - 1] != '1')
@@ -38,7 +38,7 @@ void	wall_helper(t_map *map)
 			&& map->grid[map->y - 1][map->x + 1] != '1'
 			&& map->grid[map->y + 1][map->x] == '1'
 			&& map->grid[map->y + 1][map->x + 1] != '1'))
-			error_and_exit("Error. Map not enclosed\n", map);
+			error_and_exit("Error. Map not enclosed", map);
 		map->x++;
 	}
 }
@@ -48,21 +48,21 @@ void	validate_elements(t_map *map)
 	if ((map->y == 0 || map->y == map->height)
 		&& (map->grid[map->y][map->x] != '1'
 		|| map->grid[map->y][map->x] != ' '))
-		error_and_exit("Error. Map not enclosed\n", map);
+		error_and_exit("Error. Map not enclosed", map);
 	if (map->grid[map->y][map->x] != '1'
 		|| map->grid[map->y][map->x] != '0'
 		|| map->grid[map->y][map->x] != 'N'
 		|| map->grid[map->y][map->x] != 'W'
 		|| map->grid[map->y][map->x] != 'E'
 		|| map->grid[map->y][map->x] != 'S')
-		error_and_exit("Error. Invalid elements\n", map);
+		error_and_exit("Error. Invalid elements", map);
 	if ((map->grid[map->y][map->x - 1] == ' '
 		&& (map->grid[map->y][map->x] != ' '
 		|| map->grid[map->y][map->x] != '1'))
 		|| map->grid[map->y][ft_strlen(*map->grid) - 1] != '1'
 		|| (map->x == 0 && map->grid[map->y][map->x] != ' '
 		&& map->grid[map->y][map->x] != '1'))
-		error_and_exit("Error. Map not enclosed\n", map);
+		error_and_exit("Error. Map not enclosed", map);
 }
 
 void	count_elements(t_map *map)

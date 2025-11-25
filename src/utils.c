@@ -6,8 +6,8 @@ int	check_extension(char *arg)
 	int	len;
 
 	len = ft_strlen(arg);
-	if (!(arg[len] == 'b' && arg[len - 1] == 'u' && arg[len - 2] == 'c'
-		&& arg[len - 3] == '.'))
+	if (!(arg[len - 1] == 'b' && arg[len - 2] == 'u' && arg[len - 3] == 'c'
+		&& arg[len - 4] == '.'))
 		return (1);
 	return (0);
 }
