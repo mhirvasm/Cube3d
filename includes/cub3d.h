@@ -11,12 +11,11 @@
 typedef struct s_map
 {
 	char	*line;
-	size_t	width;
-	size_t	height;
-	size_t	y;
-	size_t	x;
-	size_t	playery;
-	size_t	playerx;
+	int		height;
+	int		y;
+	int		x;
+	int		playery;
+	int		playerx;
 	char	**grid;
 	int		spawncount;
 }	t_map;
@@ -36,7 +35,7 @@ void	getmapsize(t_map *map, int fd);
 void	wall_helper(t_map *map);
 void	validate_elements(t_map *map);
 void	count_elements(t_map *map);
-void	flood_fill(t_map *copy, size_t x, size_t y);
+void	flood_fill(t_map *copy, int x, int y);
 void	free_map(t_map *map);
 void	error_and_exit(char *msg, t_map *map);
 void	error(char *msg);
