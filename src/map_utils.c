@@ -92,8 +92,8 @@ void	count_elements(t_map *map)
 
 void	flood_fill(t_map *copy, int x, int y)
 {
-	printf("in flood fill\n");
-	printf("x: %d y: %d copy->grid[y][x]: %c\n", x, y, copy->grid[y][x]);
+//	printf("in flood fill\n");
+//	printf("x: %d y: %d copy->grid[y][x]: %c\n", x, y, copy->grid[y][x]);
 	if (copy->grid[y][x] == 'F' || copy->grid[y][x] == '1')
 		return ;
 	copy->grid[y][x] = 'F';
