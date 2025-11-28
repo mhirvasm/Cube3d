@@ -8,6 +8,29 @@
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
+typedef struct s_vector
+{
+    double x;
+    double y;
+} t_vector;
+
+typedef struct s_int_point
+{
+    int x;
+    int y;
+} t_point;
+
+typedef struct s_ray
+{
+    t_vector    direction;  // Direction of the ray
+    t_vector    side_dist;  // distance to next line
+    t_vector    delta_dist; // distance over one square (fixed value)
+    t_point     map;        // current screen
+    t_point     step;       // direction (1 or -1)
+    double      wall_dist;  // final distance
+    int         side;       // (flag) 0 = vertical wall, 1 for horizontal
+} t_ray;
+
 typedef struct s_map
 {
 	char	*line;
