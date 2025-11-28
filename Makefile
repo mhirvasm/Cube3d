@@ -1,16 +1,17 @@
 # Executable name
-NAME    = cube3d
+NAME    = cub3d
 
 # Compiler and flags
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror
+CFLAGS  = -Wall -Wextra -Werror -g
 
 #Includes
-INCS        := -I include -I libft
-LIBS        := -Llibft -lft
+INCLUDES	= includes
+IFLAGS		= -I$(INCLUDES) -I$(LIBFT_DIR)
+LIBS        = -Llibft -lft
 
 # Files
-SRC     = 
+SRC     = src/main.c src/map.c src/map_utils.c src/utils.c src/cleanup.c
 OBJ     = $(SRC:.c=.o)
 
 # Libft
@@ -27,40 +28,40 @@ all: $(NAME)
 
 # Main binary
 $(NAME): $(OBJ) $(LIBFT) $(MLX_LIB)
-	$(CC) $(CFLAGS) -flto $(OBJ) $(LIBFT) $(MLX_FLAGS) -o $@
+	$(CC) $(CFLAGS) $(OBJ) $(IFLAGS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 # Compile
 %.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -I$(MLX_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) $(IFLAGS) -I$(MLX_DIR) -c $< -o $@
 
 # Build libft via its own Makefile (won't relink unless lib changes)
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR)
 
 # Build MLX so that lib exists (won't rebuild unless needed)
 mlx: $(MLX_LIB)
 $(MLX_LIB):
-	$(MAKE) -C $(MLX_DIR)
+	@make -C $(MLX_DIR)
 
 # Clean object files
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	$(MAKE) clean_mlx
+	@make -C $(LIBFT_DIR) clean
+	@make clean_mlx
 	rm -f $(OBJ)
 
 # Clean everything we own; MLX usually doesn’t have fclean, so call clean
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@make -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
 
 # Rebuild
 re:
-	$(MAKE) fclean
-	$(MAKE) all
+	@make fclean
+	@make all
 
 # Helper to clean MLX without failing if rule is missing
 clean_mlx:
-	-$(MAKE) -C $(MLX_DIR) clean
+	@make -C $(MLX_DIR) clean
 
 .PHONY: all clean fclean re

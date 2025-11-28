@@ -3,34 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 12:52:41 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/05/22 14:45:26 by mhirvasm         ###   ########.fr       */
+/*   Created: 2025/04/28 13:01:10 by vahdekiv          #+#    #+#             */
+/*   Updated: 2025/08/13 11:57:52 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdlib.h>
-
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE
+#  define BUFFER_SIZE 1
 # endif
-// Main function 
-char			*get_next_line(int fd);
 
-// Utility functions
-char			*strjoin_gnl(char *s1, char *s2);
-char			*strchr_gnl(const char *s, int c);
-size_t			strlen_gnl(const char *s);
-char			*extract_line(char *storage);
-char			*save_storage(char *storage);
-size_t			strlcpy_gnl(char *dst, const char *src, size_t size);
-char			*strdup_gnl(const char *s);
-int				is_storage_empty(char *storage);
+# include <stdlib.h>
+# include <unistd.h>
+
+char	*get_next_line(int fd);
+char	*gnl_strtruncate(char *s);
+char	*gnl_strchr(char *s, char c);
+char	*gnl_strcpy(char *dest, char *src, size_t n);
+char	*gnl_strjoin(char *s1, char *s2);
+int		gnl_strlen(char *s, char c);
 
 #endif
