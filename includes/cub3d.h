@@ -19,8 +19,12 @@
 # define D 100
 # define LEFT 65361
 # define RIGHT 65363
+# define KEY_ESC 65307
 
 # define PI 3.14159265359
+# define MOVESPEED 0.1
+# define ROTSPEED 0.05
+
 
 
 typedef struct s_vector
@@ -60,9 +64,9 @@ typedef struct s_map
 
 typedef struct s_player
 {
-    float x;
-    float y;
-    float angle;
+    t_vector    pos;    //precise location
+    t_vector    dir;    // direction vector
+    t_vector    plane;  // cameraplane vector (FOV)
 
     bool key_up;
     bool key_down;
@@ -85,7 +89,7 @@ typedef struct s_game
     int bpp;
     int size_line;
     int endian;
-	
+
     t_player player;
 }	t_game;
 
