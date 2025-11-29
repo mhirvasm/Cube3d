@@ -97,7 +97,7 @@ typedef struct s_game
 //TODO break prototypes in subcategories
 int		main(int argc, char **argv);
 int		check_extension(char *argv);
-void	create_map(char *file);
+void	create_map(t_game game, char *map_file);
 void	create_grid(t_map *map, char *map_file);
 void	validate_path(t_map *map);
 void	validate_grid(t_map *map);

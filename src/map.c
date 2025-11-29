@@ -20,7 +20,7 @@ void	create_map(t_game *game, char *map_file)
 	printf("here5\n");
 }
 
-void	create_grid(t_map *map, char *file)
+void	create_grid(t_map *map, char *map_file)
 {
 	int	fd;
 
