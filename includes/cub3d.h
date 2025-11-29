@@ -80,7 +80,7 @@ typedef struct s_player
 
 typedef struct s_game
 {
-	t_map	*map;
+	t_map	map;
 
 	void *mlx;
     void *win;
@@ -98,16 +98,16 @@ typedef struct s_game
 int		main(int argc, char **argv);
 int		check_extension(char *argv);
 void	create_map(t_game *game, char *map_file);
-void	create_grid(t_map *map, char *map_file);
-void	validate_path(t_map *map);
-void	validate_grid(t_map *map);
+void	create_grid(t_game *game, char *map_file);
+void	validate_path(t_game *game);
+void	validate_grid(t_game *game);
 void	getmapsize(t_map *map, int fd);
-void	wall_helper(t_map *map);
-void	validate_elements(t_map *map);
-void	count_elements(t_map *map);
+void	wall_helper(t_game *game);
+void	validate_elements(t_game *game);
+void	count_elements(t_game *game);
 void	flood_fill(t_map *copy, int x, int y);
 void	free_map(t_map *map);
-void	error_and_exit(char *msg, t_map *map);
+void	error_and_exit(char *msg, t_game *game);
 void	error(char *msg);
 int	    init_game(t_game *game, char *map_file);
 

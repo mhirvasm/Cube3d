@@ -14,30 +14,32 @@ void	create_map(t_game *game, char *map_file)
 	if (fd < 0)
 		error_and_exit("Error. Invalid file", game); //here we take game for cleanup
 	getmapsize(map_ptr, fd);
-	create_grid(map_ptr, map_file);
-	validate_grid(map_ptr);
-	validate_path(map_ptr);
-	printf("here5\n");
+	create_grid(game, map_file);
+	validate_grid(game);
+	validate_path(game);
+	printf("Map created succesfully\n");
 }
 
-void	create_grid(t_map *map, char *map_file)
+void	create_grid(t_game *game, char *map_file)
 {
-	int	fd;
+	int		fd;
+	t_map	*map;
 
+	map = &game->map;
 	map->y = 0;
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file", map);
+		error_and_exit("Error. Invalid file", game);
 	map->grid = malloc((map->height + 1) * sizeof(char *));
 	if (!map->grid)
-		error_and_exit("Error. Malloc failure", map);
+		error_and_exit("Error. Malloc failure", game);
 	map->line = NULL;
 	while (map->y < map->height)
 	{
 		map->line = get_next_line(fd);
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
-			error_and_exit("Error. Strdup failure", map);
+			error_and_exit("Error. Strdup failure", game);
 		map->grid[map->y][(int)ft_strlen(map->grid[map->y]) - 1] = '\0';
 		free(map->line);
 		map->y++;
@@ -46,18 +48,20 @@ void	create_grid(t_map *map, char *map_file)
 	close(fd);
 }
 
-void	validate_path(t_map *map)
+void	validate_path(t_game *game)
 {
 	t_map	*copy;
+	t_map	*map;
 
+	map = &game->map;
 	map->y = 0;
 	copy = ft_calloc(1, sizeof(t_map));
 	if (!copy)
-		error_and_exit("Error. Memory allocation failed", map);
+		error_and_exit("Error. Memory allocation failed", game);
 	copy->grid = malloc(map->height + 1 * sizeof(char *));
 	if (!copy->grid)
 	{
-		error_and_exit("Error. Memory allocation failed", map);
+		error_and_exit("Error. Memory allocation failed", game);
 		free_map(copy);
 	}
 	while (map->y < map->height)
@@ -65,7 +69,7 @@ void	validate_path(t_map *map)
 		copy->grid[map->y] = ft_strdup(map->grid[map->y]);
 		if (!copy->grid[map->y])
 		{
-			error_and_exit("Error. Strdup failure", map);
+			error_and_exit("Error. Strdup failure", game);
 			free_map(copy);
 		}
 		map->y++;
@@ -82,28 +86,34 @@ void	validate_path(t_map *map)
 		{
 			if (copy->grid[map->y][map->x] != '1'
 				&& copy->grid[map->y][map->x] != 'F')
-				error_and_exit("Error. No valid path", copy);
-			copy->x++;
+				{
+					free_map(copy);
+					error_and_exit("Error. No valid path", game);
+				}
+			map->x++;
 		}
-		copy->y++;
+		map->y++;
 	}
 	printf("here4\n");
 	free_map(copy);
 }
 
-void	validate_grid(t_map *map)
+void	validate_grid(t_game *game)
 {
+	t_map *map;
+
+	map = &game->map;
 	map->y = 0;
 	while (map->y < map->height - 1)
 	{
 		map->x = 0;
 		while (map->x < (int)ft_strlen(map->grid[map->y]) - 1)
 		{
-			wall_helper(map);
-			validate_elements(map);
+			wall_helper(game);
+			validate_elements(game);
 			map->x++;
 		}
 		map->y++;
 	}
-	count_elements(map);
+	count_elements(game);
 }
