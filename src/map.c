@@ -3,21 +3,20 @@
 
 //strlen is -1 because we don't want the newline
 
-void	create_map(char *file)
+void	create_map(t_game *game, char *map_file)
 {
-	t_map	*map;
+	t_map	*map_ptr;
 	int		fd;
 
-	map = ft_calloc(1, sizeof(t_map));
-	if (!map)
-		error_and_exit("Error. Memory allocation failed", map);
-	fd = open(file, O_RDONLY);
+	map_ptr = &game->map; //Changing from mallocing, to use game struct straight away!
+
+	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file", map);
-	getmapsize(map, fd);
-	create_grid(map, file);
-	validate_grid(map);
-	validate_path(map);
+		error_and_exit("Error. Invalid file", game); //here we take game for cleanup
+	getmapsize(map_ptr, fd);
+	create_grid(map_ptr, map_file);
+	validate_grid(map_ptr);
+	validate_path(map_ptr);
 	printf("here5\n");
 }
 
