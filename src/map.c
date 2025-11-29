@@ -25,7 +25,7 @@ void	create_grid(t_map *map, char *map_file)
 	int	fd;
 
 	map->y = 0;
-	fd = open(file, O_RDONLY);
+	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		error_and_exit("Error. Invalid file", map);
 	map->grid = malloc((map->height + 1) * sizeof(char *));
