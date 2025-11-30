@@ -1,6 +1,19 @@
 
 #include "cub3d.h"
 
+static int	key_handler(int keycode, t_game *game) //Temp  for testing
+{
+	if (keycode == KEY_ESC)
+		error_and_exit("Game closed", game); 
+	return (0);
+}
+
+static int	close_window(t_game *game) //temp for testing
+{
+	error_and_exit("Game closed", game);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_game	game;
