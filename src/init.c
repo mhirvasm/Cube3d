@@ -84,5 +84,5 @@ void	init_player_vectors(t_player *player, t_map *map)
 	set_player_direction(&player, dir_char);
 
 	//in the end we want to replace the NSEW value into empty space ('0')!
-	map->grid[map->playery][map->playerx] == '0';
+	map->grid[map->playery][map->playerx] = '0';
 }
