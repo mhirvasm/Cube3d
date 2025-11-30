@@ -81,7 +81,7 @@ void	init_player_vectors(t_player *player, t_map *map)
 
 	//Check the init direction and intialize values. (NSEW) 
 	//adjust direction and FOV value
-	set_player_direction(&player, dir_char);
+	set_player_direction(player, dir_char);
 
 	//in the end we want to replace the NSEW value into empty space ('0')!
 	map->grid[map->playery][map->playerx] = '0';

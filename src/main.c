@@ -1,13 +1,6 @@
 
 #include "cub3d.h"
 
-static int	key_handler(int keycode, t_game *game) //Temp  for testing
-{
-	if (keycode == KEY_ESC)
-		error_and_exit("Game closed", game); 
-	return (0);
-}
-
 static int	close_window(t_game *game) //temp for testing
 {
 	error_and_exit("Game closed", game);
@@ -25,7 +18,10 @@ int	main(int argc, char **argv)
 		error("Error. Incorrect map format");
 	if (init_game(&game, argv[1]) != 0)
 		error("Error. Initialization failed");
-	//create_map(argv[1]); <-- instead of this, lets do init game function which calls this
+	mlx_hook(game.win, 2, 1L << 0, key_hook, &game);
+	mlx_hook(game.win, 17, 0, close_window, &game);
+	mlx_loop_hook(game.mlx, render_frame, &game);
+	mlx_loop(game.mlx);
 	//init mlx
 	//launch game
 	//mlx hook

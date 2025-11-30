@@ -58,5 +58,34 @@ void	draw_2d_map(t_game *game)
 }
 
 //draw the player
+void	draw_player(t_game *game)
+{
+	// PRecise location as in pixels
+	// (pos.x * BLOCK)
+	int	px;
+	int	py;
+	int	size;
+
+	px = (int)(game->player.pos.x * BLOCK);
+	py = (int)(game->player.pos.y * BLOCK);
+	size = 4; // player size 4x4 pixels
+
+	// drawing the player as little rectangle
+	for (int y = -size; y < size; y++)
+		for (int x = -size; x < size; x++)
+			my_mlx_pixel_put(game, px + x, py + y, 0xFF0000);
+}
 
 //render the frame (put image to window)
+int	render_frame(t_game *game)
+{
+	//draw  map
+	draw_2d_map(game);
+
+	//draw player
+	draw_player(game);
+
+	//draw the image to window
+	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	return (0);
+}
