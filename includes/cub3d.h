@@ -110,5 +110,6 @@ void	free_map(t_map *map);
 void	error_and_exit(char *msg, t_game *game);
 void	error(char *msg);
 int	    init_game(t_game *game, char *map_file);
+void    init_player_vectors(t_player *player, t_map *map);
 
 #endif
