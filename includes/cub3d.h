@@ -14,6 +14,9 @@
 # define BLOCK 64
 # define DEBUG 0
 
+# define WHITE 0xFFFFFF
+# define BLACK 0x000000
+
 # define W 119
 # define A 97
 # define S 115
@@ -111,5 +114,7 @@ void	error_and_exit(char *msg, t_game *game);
 void	error(char *msg);
 int	    init_game(t_game *game, char *map_file);
 void    init_player_vectors(t_player *player, t_map *map);
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color);
+void	draw_map(t_game *game);
 
 #endif
