@@ -65,15 +65,24 @@ void	draw_player(t_game *game)
 	int	px;
 	int	py;
 	int	size;
+	int x;
+	int y;
 
 	px = (int)(game->player.pos.x * BLOCK);
 	py = (int)(game->player.pos.y * BLOCK);
-	size = 4; // player size 4x4 pixels
+	size = 4; // player size
 
-	// drawing the player as little rectangle
-	for (int y = -size; y < size; y++)
-		for (int x = -size; x < size; x++)
-			my_mlx_pixel_put(game, px + x, py + y, 0xFF0000);
+    y = -size; //-4 < 4
+    while (y < size)
+    {
+        x = -size;
+        while (x < size)
+        {
+            my_mlx_pixel_put(game, px + x, py + y, 0xFF0000);
+            x++;
+        }
+        y++;
+    }
 }
 
 //render the frame (put image to window)
