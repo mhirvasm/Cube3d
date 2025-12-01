@@ -20,19 +20,23 @@ void	wall_helper(t_game *game)
 	t_map *map;
 
 	map = &game->map;
-	if (map->grid[map->y][map->x] == ' ')
+	while (map->grid[map->y][map->x] == ' ')
 	{
 		if (map->y == 0 && (map->grid[map->y + 1][map->x] != ' '
-			|| map->grid[map->y + 1][map->x] != '1'))
-			error_and_exit("Error. Map not enclosed", game);
+			&& map->grid[map->y + 1][map->x] != '1'))
+		{
+			printf("%d %d\n", map->y, map->x);
+			error_and_exit("Error. Map not enclosed1", game);
+		}
 		if (map->y == map->height - 1 && (map->grid[map->y - 1][map->x] != ' '
 			|| map->grid[map->y - 1][map->x] != '1'))
-			error_and_exit("Error. Map not enclosed", game);
-		if ((map->y != 0 && map->y != map->height - 1
-			&& map->grid[map->y - 1][map->x] != ' ')
-			|| map->grid[map->y - 1][map->x] != '1'
-			|| map->grid[map->y + 1][map->x] != ' '
-			|| map->grid[map->y + 1][map->x] != '1')
+			error_and_exit("Error. Map not enclosed2", game);
+		if (map->y != 0 && map->y != map->height - 1
+			&& ((map->grid[map->y - 1][map->x] != ' '
+			&& map->grid[map->y - 1][map->x] != '1')
+			|| (map->grid[map->y + 1][map->x] != ' '
+			&& map->grid[map->y + 1][map->x] != '1')))
+			error_and_exit("Error. Map not enclosed2.1", game);
 		if ((map->y == 0 && map->grid[map->y + 1][map->x] == '1'
 			&& map->grid[map->y + 1][map->x + 1] != '1')
 			|| (map->y == map->height - 1 && map->grid[map->y - 1][map->x] == '1'
@@ -42,7 +46,7 @@ void	wall_helper(t_game *game)
 			&& map->grid[map->y - 1][map->x + 1] != '1'
 			&& map->grid[map->y + 1][map->x] == '1'
 			&& map->grid[map->y + 1][map->x + 1] != '1'))
-			error_and_exit("Error. Map not enclosed", game);
+			error_and_exit("Error. Map not enclosed3", game);
 		map->x++;
 	}
 }
@@ -55,21 +59,27 @@ void	validate_elements(t_game *game)
 	if ((map->y == 0 || map->y == map->height - 1)
 		&& (map->grid[map->y][map->x] != '1'
 		&& map->grid[map->y][map->x] != ' '))
-		error_and_exit("Error. Map not enclosed", game);
+		error_and_exit("Error. Map not enclosed4", game);
 	if (map->grid[map->y][map->x] && map->grid[map->y][map->x] != '1'
 		&& map->grid[map->y][map->x] != '0'
 		&& map->grid[map->y][map->x] != 'N'
 		&& map->grid[map->y][map->x] != 'W'
 		&& map->grid[map->y][map->x] != 'E'
 		&& map->grid[map->y][map->x] != 'S')
+	{
+		printf("%d %d\n", map->y, map->x);
 		error_and_exit("Error. Invalid elements", game);
-	if ((map->grid[map->y][map->x - 1] &&  map->grid[map->y][map->x - 1] == ' '
+	}
+	if ((map->x == 0 && map->grid[map->y][map->x] != ' '
+		&& map->grid[map->y][map->x] != '1') 
+		|| ((map->x != 0 && map->grid[map->y][map->x - 1] &&  map->grid[map->y][map->x - 1] == ' '
 		&& (map->grid[map->y][map->x] != ' '
-		|| map->grid[map->y][map->x] != '1'))
-		|| map->grid[map->y][ft_strlen(map->grid[map->y]) - 1] != '1'
-		|| (map->x == 0 && map->grid[map->y][map->x] != ' '
 		&& map->grid[map->y][map->x] != '1'))
-		error_and_exit("Error. Map not enclosed", game);
+		|| map->grid[map->y][ft_strlen(map->grid[map->y]) - 1] != '1'))
+	{
+		printf("%d %d\n", map->y, map->x);
+		error_and_exit("Error. Map not enclosed5", game);
+	}
 }
 
 void	count_elements(t_game *game)

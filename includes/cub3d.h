@@ -11,9 +11,9 @@
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
-# define WIDTH 1280
-# define HEIGHT 720
-# define BLOCK 64
+# define WIDTH 1980
+# define HEIGHT 1280
+# define BLOCK 32
 # define DEBUG 0
 
 # define WHITE 0xFFFFFF
@@ -29,7 +29,7 @@
 
 # define PI 3.14159265359
 # define MOVESPEED 0.1
-# define ROTSPEED 0.05
+# define ROTSPEED 0.1
 
 
 
@@ -88,14 +88,14 @@ typedef struct s_game
 {
 	t_map	map;
 
-	void *mlx;
-    void *win;
-    void *img;
+	void	*mlx;
+    void	*win;
+    void	*img;
 
-    char *data;
-    int bpp;
-    int size_line;
-    int endian;
+    char	*data;
+    int		bpp;
+    int		size_line;
+    int		endian;
 
     t_player player;
 }	t_game;
