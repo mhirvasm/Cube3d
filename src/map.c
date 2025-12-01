@@ -85,13 +85,6 @@ void	validate_path(t_game *game)
 	y = 0;
 	while (y < map->height)
 	{
-		printf("%s\n", copy->grid[y]);
-		y++;
-	}
-	printf("here3\n");
-	y = 0;
-	while (y < map->height)
-	{
 		x = 0;
 		while (copy->grid[y][x])
 		{
@@ -111,7 +104,6 @@ void	validate_path(t_game *game)
 		}
 		y++;
 	}
-	printf("hello\n");	
 	// Clean,  free the copy, not used anymore 
 //	free_map(copy);
 //	free(copy);
