@@ -42,6 +42,7 @@ void	create_grid(t_game *game, char *map_file)
 			error_and_exit("Error. Strdup failure", game);
 		map->grid[map->y][(int)ft_strlen(map->grid[map->y]) - 1] = '\0';
 		free(map->line);
+		map->line = NULL;
 		map->y++;
 	}
 	map->grid[map->y] = NULL;
@@ -62,7 +63,7 @@ void	validate_path(t_game *game)
 		error_and_exit("Error. Memory allocation failed", game);
 	copy->height = map->height; //lets copyy
 	copy->width = map->width; //lets copyyyy
-	copy->grid = malloc(map->height + 1 * sizeof(char *));
+	copy->grid = malloc((map->height + 1) * sizeof(char *));
 	if (!copy->grid)
 	{
 		free_map(copy); //free  before exit!!!
@@ -81,6 +82,12 @@ void	validate_path(t_game *game)
 	}
 	copy->grid[y] = NULL;
 	flood_fill(copy, map->playerx, map->playery);
+	y = 0;
+	while (y < map->height)
+	{
+		printf("%s\n", copy->grid[y]);
+		y++;
+	}
 	printf("here3\n");
 	y = 0;
 	while (y < map->height)
@@ -104,10 +111,10 @@ void	validate_path(t_game *game)
 		}
 		y++;
 	}
-	
+	printf("hello\n");	
 	// Clean,  free the copy, not used anymore 
-	free_map(copy);
-	free(copy);
+//	free_map(copy);
+//	free(copy);
 }
 
 void	validate_grid(t_game *game)
