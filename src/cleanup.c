@@ -28,8 +28,19 @@ void	error_and_exit(char *msg, t_game *game)
 {
 	printf("%s\n", msg);
 	if (game)
+    {
 		free_map(&game->map); //free map
-	//TODO add mlx cleanup here too behind if check
+	if (game->img)
+		mlx_destroy_image(game->mlx, game->img);
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+    }
+
 	exit(1);
 }
 

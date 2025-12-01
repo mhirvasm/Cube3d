@@ -6,6 +6,8 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include <math.h>
+# include <mlx.h>
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
@@ -13,6 +15,9 @@
 # define HEIGHT 720
 # define BLOCK 64
 # define DEBUG 0
+
+# define WHITE 0xFFFFFF
+# define BLACK 0x000000
 
 # define W 119
 # define A 97
@@ -55,6 +60,7 @@ typedef struct s_map
 {
 	char	*line;
 	int		height;
+    int     width;
 	int		y;
 	int		x;
 	int		playery;
@@ -94,21 +100,49 @@ typedef struct s_game
     t_player player;
 }	t_game;
 
-//TODO break prototypes in subcategories
-int		main(int argc, char **argv);
-int		check_extension(char *argv);
-void	create_map(t_game *game, char *map_file);
-void	create_grid(t_game *game, char *map_file);
-void	validate_path(t_game *game);
-void	validate_grid(t_game *game);
-void	getmapsize(t_map *map, int fd);
-void	wall_helper(t_game *game);
-void	validate_elements(t_game *game);
-void	count_elements(t_game *game);
-void	flood_fill(t_map *copy, int x, int y);
-void	free_map(t_map *map);
-void	error_and_exit(char *msg, t_game *game);
-void	error(char *msg);
-int	    init_game(t_game *game, char *map_file);
+/* ************************************************************************** */
+/* INITIALIZATION                                                             */
+/* ************************************************************************** */
+int     init_game(t_game *game, char *map_file);
+void    init_player_vectors(t_player *player, t_map *map);
+
+/* ************************************************************************** */
+/* MAP PARSING & READING                                                      */
+/* ************************************************************************** */
+int     check_extension(char *argv);
+void    create_map(t_game *game, char *map_file);
+void    create_grid(t_game *game, char *map_file);
+void    getmapsize(t_map *map, int fd);
+
+/* ************************************************************************** */
+/* MAP VALIDATION                                                             */
+/* ************************************************************************** */
+void    validate_grid(t_game *game);
+void    validate_path(t_game *game);
+void    wall_helper(t_game *game);
+void    validate_elements(t_game *game);
+void    count_elements(t_game *game);
+void    flood_fill(t_map *copy, int x, int y);
+
+/* ************************************************************************** */
+/* RENDERING & GRAPHICS                                                       */
+/* ************************************************************************** */
+int     render_frame(t_game *game);
+void    draw_2d_map(t_game *game);
+void    draw_player(t_game *game);
+void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
+
+/* ************************************************************************** */
+/* INPUT & MOVEMENT                                                           */
+/* ************************************************************************** */
+int     key_hook(int keycode, t_game *game);
+void    rotate_player(t_game *game, double rot_speed);
+
+/* ************************************************************************** */
+/* CLEANUP & ERROR HANDLING                                                   */
+/* ************************************************************************** */
+void    free_map(t_map *map);
+void    error_and_exit(char *msg, t_game *game);
+void    error(char *msg);
 
 #endif

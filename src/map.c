@@ -52,50 +52,62 @@ void	validate_path(t_game *game)
 {
 	t_map	*copy;
 	t_map	*map;
+	int		x; //lets use local variables
+	int		y; // lets use local variables
 
 	map = &game->map;
-	map->y = 0;
+	//map->y = 0; we dont want to change these values DELETE THIS 
 	copy = ft_calloc(1, sizeof(t_map));
 	if (!copy)
 		error_and_exit("Error. Memory allocation failed", game);
+	copy->height = map->height; //lets copyy
+	copy->width = map->width; //lets copyyyy
 	copy->grid = malloc(map->height + 1 * sizeof(char *));
 	if (!copy->grid)
 	{
+		free_map(copy); //free  before exit!!!
 		error_and_exit("Error. Memory allocation failed", game);
-		free_map(copy);
 	}
-	while (map->y < map->height)
+	y = 0;
+	while (y < map->height)
 	{
-		copy->grid[map->y] = ft_strdup(map->grid[map->y]);
-		if (!copy->grid[map->y])
+		copy->grid[y] = ft_strdup(map->grid[y]);
+		if (!copy->grid[y])
 		{
+			free_map(copy); //free before exit
 			error_and_exit("Error. Strdup failure", game);
-			free_map(copy);
 		}
-		map->y++;
+		y++;
 	}
-	copy->grid[map->y] = NULL;
-	map->y = 0;
+	copy->grid[y] = NULL;
 	flood_fill(copy, map->playerx, map->playery);
 	printf("here3\n");
-	map->y = 0;
-	while (map->y < map->height - 1)
+	y = 0;
+	while (y < map->height)
 	{
-		map->x = 0;
-		while (map->x < (int)ft_strlen(copy->grid[map->y]) - 1)
+		x = 0;
+		while (copy->grid[y][x])
 		{
-			if (copy->grid[map->y][map->x] != '1'
-				&& copy->grid[map->y][map->x] != 'F')
+			// Check  if F is placed safely
+			if (copy->grid[y][x] == 'F')
+			{
+				// If F is placed on any side of the map, --> map will leak, error!
+				if (x == 0 || y == 0 || y == map->height - 1 
+					|| copy->grid[y][x + 1] == '\0' || copy->grid[y][x + 1] == ' ')
 				{
 					free_map(copy);
-					error_and_exit("Error. No valid path", game);
+					free(copy);
+					error_and_exit("Error. Map is not enclosed", game);
 				}
-			map->x++;
+			}
+			x++;
 		}
-		map->y++;
+		y++;
 	}
-	printf("here4\n");
+	
+	// Clean,  free the copy, not used anymore 
 	free_map(copy);
+	free(copy);
 }
 
 void	validate_grid(t_game *game)
