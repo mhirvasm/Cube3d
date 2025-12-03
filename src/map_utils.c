@@ -24,10 +24,7 @@ void	wall_helper(t_game *game)
 	{
 		if (map->y == 0 && (map->grid[map->y + 1][map->x] != ' '
 			&& map->grid[map->y + 1][map->x] != '1'))
-		{
-			printf("%d %d\n", map->y, map->x);
 			error_and_exit("Error. Map not enclosed1", game);
-		}
 		if (map->y == map->height - 1 && (map->grid[map->y - 1][map->x] != ' '
 			|| map->grid[map->y - 1][map->x] != '1'))
 			error_and_exit("Error. Map not enclosed2", game);
