@@ -91,6 +91,8 @@ int	render_frame(t_game *game)
 	//draw  map
 	draw_2d_map(game);
 
+	move_player(game);
+
 	//draw player
 	draw_player(game);
 

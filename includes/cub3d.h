@@ -135,8 +135,10 @@ void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */
 /* ************************************************************************** */
-int     key_hook(int keycode, t_game *game);
-void    rotate_player(t_game *game, double rot_speed);
+int     key_press(int keycode, t_game *game);
+int		key_release(int keycode, t_game *game);
+void	move_player(t_game *game);
+void	rotate_player(t_game *game, double rot_speed);
 
 /* ************************************************************************** */
 /* CLEANUP & ERROR HANDLING                                                   */
