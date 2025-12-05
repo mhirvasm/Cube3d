@@ -28,15 +28,15 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.1
-# define ROTSPEED 0.1
+# define MOVESPEED 0.01
+# define ROTSPEED 0.0000003
 
 
 
 typedef struct s_vector
 {
-    double x;
-    double y;
+    float x;
+    float y;
 } t_vector;
 
 typedef struct s_int_point
@@ -74,6 +74,7 @@ typedef struct s_player
     t_vector    pos;    //precise location
     t_vector    dir;    // direction vector
     t_vector    plane;  // cameraplane vector (FOV)
+	float		angle;
 
     bool key_up;
     bool key_down;
@@ -138,7 +139,7 @@ void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 int     key_press(int keycode, t_game *game);
 int		key_release(int keycode, t_game *game);
 void	move_player(t_game *game);
-void	rotate_player(t_game *game, double rot_speed);
+//void	rotate_player(t_game *game, double rot_speed);
 
 /* ************************************************************************** */
 /* CLEANUP & ERROR HANDLING                                                   */

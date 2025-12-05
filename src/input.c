@@ -1,5 +1,5 @@
 #include "cub3d.h"
-
+/*
 //rotate player function
 void	rotate_player(t_game *game, double rot_speed)
 {
@@ -15,7 +15,7 @@ void	rotate_player(t_game *game, double rot_speed)
 	p->plane.x = p->plane.x * cos(rot_speed) - p->plane.y * sin(rot_speed);
 	p->plane.y = old_plane_x * sin(rot_speed) + p->plane.y * cos(rot_speed);
 }
-
+*/
 static int	movement(t_game *game, int x, int y)
 {
 	if (game->map.grid[y][x] == '1')
@@ -61,33 +61,65 @@ int	key_release(int keycode, t_game *game)
 
 void	move_player(t_game *game)
 {
+	float	angle_speed;
+	float	cos_angle;
+	float	sin_angle;
+	float	x;
+	float	y;
+
+	angle_speed = 0.015;
+	cos_angle = cos(game->player.angle);
+	sin_angle = sin(game->player.angle);
+	x = game->player.pos.x;
+	y = game->player.pos.y;
+
+	if (game->player.right_rotate)
+		game->player.angle += angle_speed;
+	if (game->player.left_rotate)
+		game->player.angle -= angle_speed;
+	if (game->player.angle > 2 * PI)
+		game->player.angle = 0;
+	if (game->player.angle < 0)
+		game->player.angle = 2 * PI;
 	if (game->player.key_up)
 	{
-		if (movement(game, game->player.pos.x, game->player.pos.y - 0.1))
+		x -= cos_angle * MOVESPEED - 0.1;
+		y -= sin_angle * MOVESPEED - 0.1;
+		if (movement(game, x, y))
 			return ;
-		game->player.pos.y -= MOVESPEED;
+		game->player.pos.x -= cos_angle * MOVESPEED;
+		game->player.pos.y -= sin_angle * MOVESPEED;
 	}
 	if (game->player.key_down)
 	{
-		if (movement(game, game->player.pos.x, game->player.pos.y + 0.1))
+		x += cos_angle * MOVESPEED + 0.1;
+		y += sin_angle * MOVESPEED + 0.1;
+		if (movement(game, x, y))
 			return ;
-		game->player.pos.y += MOVESPEED;
+		game->player.pos.x += cos_angle * MOVESPEED;
+		game->player.pos.y += sin_angle * MOVESPEED;
 	}
 	if (game->player.key_left)
 	{
-		if (movement(game, game->player.pos.x - 0.1, game->player.pos.y))
+		x -= sin_angle * MOVESPEED - 0.1;
+		y += cos_angle * MOVESPEED + 0.1;
+		if (movement(game, x, y))
 			return ;
-		game->player.pos.x -= MOVESPEED;
+		game->player.pos.x -= sin_angle * MOVESPEED;
+		game->player.pos.y += cos_angle * MOVESPEED;
 	}
 	if (game->player.key_right)
 	{
-		if (movement(game, game->player.pos.x + 0.1, game->player.pos.y))
+		x += sin_angle * MOVESPEED + 0.1;
+		y -= cos_angle * MOVESPEED - 0.1;
+		if (movement(game, x, y))
 			return ;
-		game->player.pos.x += MOVESPEED;
+		game->player.pos.x += sin_angle * MOVESPEED;
+		game->player.pos.y -= cos_angle * MOVESPEED;
 	}
 	// rotation does not work yet
-	if (game->player.right_rotate)
-		rotate_player(game, ROTSPEED);
-	if (game->player.left_rotate)
-		rotate_player(game, -ROTSPEED);
+//	if (game->player.right_rotate)
+//		rotate_player(game, ROTSPEED);
+//	if (game->player.left_rotate)
+//		rotate_player(game, -ROTSPEED);
 }
