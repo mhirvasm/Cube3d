@@ -11,3 +11,21 @@ int	check_extension(char *arg)
 		return (1);
 	return (0);
 }
+
+void	clear_image(t_game *game)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < WIDTH)
+		{
+			my_mlx_pixel_put(game, x * BLOCK, y * BLOCK, BLACK);
+			x++;
+		}
+		y++;
+	}
+}

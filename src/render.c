@@ -13,7 +13,7 @@ void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 }
 
 //draw the blocks (rectangles)
-static void	draw_square(t_game *game, int x, int y, int color)
+void	draw_square(t_game *game, int x, int y, int color)
 {
 	int	i;
 	int	j;
@@ -71,15 +71,14 @@ void	draw_player(t_game *game)
 	px = (int)(game->player.pos.x * BLOCK);
 	py = (int)(game->player.pos.y * BLOCK);
 	size = 4; // player size
-
-    y = -size; //-4 < 4
+	y = -size; //-4 < 4
     while (y < size)
     {
         x = -size;
         while (x < size)
         {
             my_mlx_pixel_put(game, px + x, py + y, 0xFF0000);
-            x++;
+			x++;
         }
         y++;
     }
@@ -88,14 +87,12 @@ void	draw_player(t_game *game)
 //render the frame (put image to window)
 int	render_frame(t_game *game)
 {
-	//draw  map
-	draw_2d_map(game);
-
 	move_player(game);
-
-	//draw player
+	//draw  map
+	clear_image(game);
 	draw_player(game);
-
+	draw_2d_map(game);
+	//draw player
 	//draw the image to window
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);

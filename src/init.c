@@ -78,7 +78,7 @@ void	init_player_vectors(t_player *player, t_map *map)
 	//init and place the player in the middle of the grid by adding 0.5, to evade potential bugs (next to wall example)
 	player->pos.x = (double)map->playerx + 0.5;
 	player->pos.y = (double)map->playery + 0.5; //"playery" lmao xdd
-	player->angle = PI / 2;
+	player->angle = (PI / 180) * 270; // facing north
 	player->key_up = false;
 	player->key_down = false;
 	player->key_right = false;

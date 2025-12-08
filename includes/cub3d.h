@@ -75,14 +75,12 @@ typedef struct s_player
     t_vector    dir;    // direction vector
     t_vector    plane;  // cameraplane vector (FOV)
 	float		angle;
-
-    bool key_up;
-    bool key_down;
-    bool key_left;
-    bool key_right;
-
-    bool left_rotate;
-    bool right_rotate;
+    bool		key_up;
+    bool		key_down;
+    bool		key_left;
+    bool		key_right;
+    bool		left_rotate;
+    bool		right_rotate;
 }   t_player;
 
 typedef struct s_game
@@ -131,6 +129,8 @@ void    flood_fill(t_map *copy, int x, int y);
 int     render_frame(t_game *game);
 void    draw_2d_map(t_game *game);
 void    draw_player(t_game *game);
+void	draw_square(t_game *game, int x, int y, int color);
+void	clear_image(t_game *game);
 void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 
 /* ************************************************************************** */

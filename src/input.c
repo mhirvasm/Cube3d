@@ -83,43 +83,38 @@ void	move_player(t_game *game)
 		game->player.angle = 2 * PI;
 	if (game->player.key_up)
 	{
-		x -= cos_angle * MOVESPEED - 0.1;
-		y -= sin_angle * MOVESPEED - 0.1;
-		if (movement(game, x, y))
-			return ;
-		game->player.pos.x -= cos_angle * MOVESPEED;
-		game->player.pos.y -= sin_angle * MOVESPEED;
-	}
-	if (game->player.key_down)
-	{
-		x += cos_angle * MOVESPEED + 0.1;
-		y += sin_angle * MOVESPEED + 0.1;
+		x += cos_angle * MOVESPEED - 0.1;
+		y += sin_angle * MOVESPEED - 0.1;
 		if (movement(game, x, y))
 			return ;
 		game->player.pos.x += cos_angle * MOVESPEED;
 		game->player.pos.y += sin_angle * MOVESPEED;
 	}
-	if (game->player.key_left)
+	if (game->player.key_down)
 	{
-		x -= sin_angle * MOVESPEED - 0.1;
-		y += cos_angle * MOVESPEED + 0.1;
+		x -= cos_angle * MOVESPEED + 0.1;
+		y -= sin_angle * MOVESPEED + 0.1;
 		if (movement(game, x, y))
 			return ;
-		game->player.pos.x -= sin_angle * MOVESPEED;
-		game->player.pos.y += cos_angle * MOVESPEED;
+		game->player.pos.x -= cos_angle * MOVESPEED;
+		game->player.pos.y -= sin_angle * MOVESPEED;
 	}
-	if (game->player.key_right)
+	if (game->player.key_left)
 	{
-		x += sin_angle * MOVESPEED + 0.1;
-		y -= cos_angle * MOVESPEED - 0.1;
+		x += sin_angle * MOVESPEED - 0.1;
+		y -= cos_angle * MOVESPEED + 0.1;
 		if (movement(game, x, y))
 			return ;
 		game->player.pos.x += sin_angle * MOVESPEED;
 		game->player.pos.y -= cos_angle * MOVESPEED;
 	}
-	// rotation does not work yet
-//	if (game->player.right_rotate)
-//		rotate_player(game, ROTSPEED);
-//	if (game->player.left_rotate)
-//		rotate_player(game, -ROTSPEED);
+	if (game->player.key_right)
+	{
+		x -= sin_angle * MOVESPEED + 0.1;
+		y += cos_angle * MOVESPEED - 0.1;
+		if (movement(game, x, y))
+			return ;
+		game->player.pos.x -= sin_angle * MOVESPEED;
+		game->player.pos.y += cos_angle * MOVESPEED;
+	}
 }
