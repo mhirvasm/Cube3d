@@ -68,6 +68,12 @@ typedef struct s_map
 	char	**grid;
 	char	player_dir;
 	int		spawncount;
+	char	*northtexture;
+	char	*southtexture;
+	char	*easttexture;
+	char	*westtexture;
+	char	*floor;
+	char	*ceiling;
 }	t_map;
 
 typedef struct s_player
@@ -110,6 +116,7 @@ void    init_player_vectors(t_player *player, t_map *map);
 /* MAP PARSING & READING                                                      */
 /* ************************************************************************** */
 int     check_extension(char *argv);
+int		gettextures(t_map *map, int fd);
 void    create_map(t_game *game, char *map_file);
 void    create_grid(t_game *game, char *map_file);
 void    getmapsize(t_map *map, int fd);

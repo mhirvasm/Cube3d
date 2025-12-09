@@ -130,8 +130,8 @@ int	render_frame(t_game *game)
 {
 	draw_2d_map(game);
 	draw_player(game);
-	draw_player_dir(game);
 	move_player(game);
+	draw_player_dir(game);
 	//draw  map
 	//draw player
 	//draw the image to window
