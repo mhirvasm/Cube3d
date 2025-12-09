@@ -29,7 +29,7 @@
 
 # define PI 3.14159265359
 # define MOVESPEED 0.01
-# define ROTSPEED 0.0000003
+# define ROTSPEED 0.01
 
 
 
@@ -140,7 +140,7 @@ void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 int     key_press(int keycode, t_game *game);
 int		key_release(int keycode, t_game *game);
 void	move_player(t_game *game);
-//void	rotate_player(t_game *game, double rot_speed);
+void	rotate_player(t_game *game, double rot_speed);
 
 /* ************************************************************************** */
 /* CLEANUP & ERROR HANDLING                                                   */

@@ -1,22 +1,6 @@
 #include "cub3d.h"
-/*
-//rotate player function
-void	rotate_player(t_game *game, double rot_speed)
-{
-	t_player	*p;
-	double		old_dir_x;
-	double		old_plane_x;
 
-	p = &game->player;
-	old_dir_x = p->dir.x;
-	p->dir.x = p->dir.x * cos(rot_speed) - p->dir.y * sin(rot_speed);
-	p->dir.y = old_dir_x * sin(rot_speed) + p->dir.y * cos(rot_speed);
-	old_plane_x = p->plane.x;
-	p->plane.x = p->plane.x * cos(rot_speed) - p->plane.y * sin(rot_speed);
-	p->plane.y = old_plane_x * sin(rot_speed) + p->plane.y * cos(rot_speed);
-}
-*/
-static int	movement(t_game *game, int x, int y)
+static int	is_wall(t_game *game, int x, int y)
 {
 	if (game->map.grid[y][x] == '1')
 		return (1);
@@ -61,6 +45,65 @@ int	key_release(int keycode, t_game *game)
 
 void	move_player(t_game *game)
 {
+	double	new_x;
+	double	new_y;
+	t_player *p;
+
+	p = &game->player;
+
+	if (p->right_rotate)
+		rotate_player(game, ROTSPEED);
+	if (p->left_rotate)
+		rotate_player(game, -ROTSPEED);
+	if (p->key_up)
+	{
+		new_x = p->pos.x + p->dir.x * MOVESPEED;
+		new_y = p->pos.y + p->dir.y * MOVESPEED;
+		if (!is_wall(game, new_x, p->pos.y)) p->pos.x = new_x;
+		if (!is_wall(game, p->pos.x, new_y)) p->pos.y = new_y;
+	}
+	if (p->key_down)
+	{
+		new_x = p->pos.x - p->dir.x * MOVESPEED;
+		new_y = p->pos.y - p->dir.y * MOVESPEED;
+		if (!is_wall(game, new_x, p->pos.y)) p->pos.x = new_x;
+		if (!is_wall(game, p->pos.x, new_y)) p->pos.y = new_y;
+	}
+	if (p->key_right)
+	{
+		new_x = p->pos.x - p->dir.y * MOVESPEED;
+		new_y = p->pos.y + p->dir.x * MOVESPEED;
+		if (!is_wall(game, new_x, p->pos.y)) p->pos.x = new_x;
+		if (!is_wall(game, p->pos.x, new_y)) p->pos.y = new_y;
+	}
+	if (p->key_left)
+	{
+		new_x = p->pos.x + p->dir.y * MOVESPEED;
+		new_y = p->pos.y - p->dir.x * MOVESPEED;
+		if (!is_wall(game, new_x, p->pos.y)) p->pos.x = new_x;
+		if (!is_wall(game, p->pos.x, new_y)) p->pos.y = new_y;
+	}
+}
+
+void	rotate_player(t_game *game, double rot_speed)
+{
+	t_player	*p;
+	double		old_dir_x;
+	double		old_plane_x;
+
+	p = &game->player;
+	old_dir_x = p->dir.x;
+	p->dir.x = p->dir.x * cos(rot_speed) - p->dir.y * sin(rot_speed);
+	p->dir.y = old_dir_x * sin(rot_speed) + p->dir.y * cos(rot_speed);
+
+	old_plane_x = p->plane.x;
+	p->plane.x = p->plane.x * cos(rot_speed) - p->plane.y * sin(rot_speed);
+	p->plane.y = old_plane_x * sin(rot_speed) + p->plane.y * cos(rot_speed);
+}
+
+/*
+void	move_player(t_game *game)
+{
 	float	angle_speed;
 	float	cos_angle;
 	float	sin_angle;
@@ -81,6 +124,7 @@ void	move_player(t_game *game)
 		game->player.angle = 0;
 	if (game->player.angle < 0)
 		game->player.angle = 2 * PI;
+	
 	if (game->player.key_up)
 	{
 		x += cos_angle * MOVESPEED - 0.1;
@@ -118,3 +162,4 @@ void	move_player(t_game *game)
 		game->player.pos.y += cos_angle * MOVESPEED;
 	}
 }
+	*/

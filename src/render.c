@@ -84,11 +84,53 @@ void	draw_player(t_game *game)
     }
 }
 
+
+
+static void draw_line(t_game *game, t_vector start, t_vector end, int color)
+{
+	double	delta_x;
+	double	delta_y;
+	double	pixel_x;
+	double	pixel_y;
+	int		pixels;
+
+	delta_x = end.x - start.x;
+	delta_y = end.y - start.y;
+	pixels = sqrt((delta_x * delta_x) + (delta_y * delta_y));
+	delta_x /= pixels;
+	delta_y /= pixels;
+	pixel_x = start.x;
+	pixel_y = start.y;
+	while (pixels)
+	{
+		my_mlx_pixel_put(game, pixel_x, pixel_y, color);
+		pixel_x += delta_x;
+		pixel_y += delta_y;
+		pixels--;
+	}
+}
+
+void draw_player_dir(t_game *game)
+{
+	t_vector	start;
+	t_vector	end;
+
+
+	start.x = game->player.pos.x * BLOCK;
+	start.y = game->player.pos.y * BLOCK;
+
+	end.x = start.x + (game->player.dir.x * 30);
+	end.y = start.y + (game->player.dir.y * 30);
+
+	draw_line(game, start, end, 0xFFFF00);
+}
+
 //render the frame (put image to window)
 int	render_frame(t_game *game)
 {
 	draw_2d_map(game);
 	draw_player(game);
+	draw_player_dir(game);
 	move_player(game);
 	//draw  map
 	//draw player

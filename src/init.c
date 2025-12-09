@@ -35,7 +35,7 @@ int	init_game(t_game *game, char *map_file)
 	return (0);
 
 }
-
+/*
 static void	set_player_direction(t_map *map, t_player *player)
 {
 	//TODO how to make this into 25 lines? HNGGGHGHGHGHG
@@ -47,6 +47,35 @@ static void	set_player_direction(t_map *map, t_player *player)
 		player->angle = 0; // facing east
 	else if (map->player_dir == 'W')
 		player->angle = (PI / 180) * 180; // facing west
+}*/
+
+static void	set_player_direction(t_player *player, char dir)
+{
+	player->dir.x = 0;
+	player->dir.y = 0;
+	player->plane.x = 0;
+	player->plane.y = 0;
+
+	if (dir == 'N')
+	{
+		player->dir.y = -1;
+		player->plane.x = 0.66; 
+	}
+	else if (dir == 'S')
+	{
+		player->dir.y = 1;
+		player->plane.x = -0.66;
+	}
+	else if (dir == 'E')
+	{
+		player->dir.x = 1;
+		player->plane.y = 0.66;
+	}
+	else if (dir == 'W')
+	{
+		player->dir.x = -1;
+		player->plane.y = -0.66;
+	}
 }
 
 void	init_player_vectors(t_player *player, t_map *map)
@@ -54,7 +83,7 @@ void	init_player_vectors(t_player *player, t_map *map)
 	//init and place the player in the middle of the grid by adding 0.5, to evade potential bugs (next to wall example)
 	player->pos.x = (double)map->playerx + 0.5;
 	player->pos.y = (double)map->playery + 0.5; //"playery" lmao xdd
-	set_player_direction(map, player);
+	set_player_direction(player, map->player_dir);
 	player->key_up = false;
 	player->key_down = false;
 	player->key_right = false;
