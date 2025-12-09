@@ -13,8 +13,8 @@ void	create_map(t_game *game, char *map_file)
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		error_and_exit("Error. Invalid file", game); //here we take game for cleanup
-	if (gettextures(fd))
-		error_and_exit("Error. Invalid file", game);
+//	if (gettextures(map_ptr, fd))
+//		error_and_exit("Error. Invalid file", game);
 	getmapsize(map_ptr, fd);
 	create_grid(game, map_file);
 	validate_grid(game);
