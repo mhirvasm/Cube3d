@@ -19,10 +19,10 @@ void	draw_square(t_game *game, int x, int y, int color)
 	int	j;
 
 	i = 0;
-	while (i < BLOCK - 1) // -1 so we have the "grid effect" and the blocks dont melt to each  other.
+	while (i < BLOCK) // -1 so we have the "grid effect" and the blocks dont melt to each  other.
 	{
 		j = 0;
-		while (j < BLOCK - 1)
+		while (j < BLOCK)
 		{
 			my_mlx_pixel_put(game, x * BLOCK + i, y * BLOCK + j, color); //x*block and y*block transforms map coordinates into pixel coordinates
 			j++;
@@ -87,11 +87,10 @@ void	draw_player(t_game *game)
 //render the frame (put image to window)
 int	render_frame(t_game *game)
 {
+	draw_2d_map(game);
+	draw_player(game);
 	move_player(game);
 	//draw  map
-	clear_image(game);
-	draw_player(game);
-	draw_2d_map(game);
 	//draw player
 	//draw the image to window
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);

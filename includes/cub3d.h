@@ -66,6 +66,7 @@ typedef struct s_map
 	int		playery;
 	int		playerx;
 	char	**grid;
+	char	player_dir;
 	int		spawncount;
 }	t_map;
 
