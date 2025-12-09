@@ -28,15 +28,15 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.1
-# define ROTSPEED 0.1
+# define MOVESPEED 0.01
+# define ROTSPEED 0.0000003
 
 
 
 typedef struct s_vector
 {
-    double x;
-    double y;
+    float x;
+    float y;
 } t_vector;
 
 typedef struct s_int_point
@@ -66,6 +66,7 @@ typedef struct s_map
 	int		playery;
 	int		playerx;
 	char	**grid;
+	char	player_dir;
 	int		spawncount;
 }	t_map;
 
@@ -74,14 +75,13 @@ typedef struct s_player
     t_vector    pos;    //precise location
     t_vector    dir;    // direction vector
     t_vector    plane;  // cameraplane vector (FOV)
-
-    bool key_up;
-    bool key_down;
-    bool key_left;
-    bool key_right;
-
-    bool left_rotate;
-    bool right_rotate;
+	float		angle;
+    bool		key_up;
+    bool		key_down;
+    bool		key_left;
+    bool		key_right;
+    bool		left_rotate;
+    bool		right_rotate;
 }   t_player;
 
 typedef struct s_game
@@ -130,13 +130,17 @@ void    flood_fill(t_map *copy, int x, int y);
 int     render_frame(t_game *game);
 void    draw_2d_map(t_game *game);
 void    draw_player(t_game *game);
+void	draw_square(t_game *game, int x, int y, int color);
+void	clear_image(t_game *game);
 void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */
 /* ************************************************************************** */
-int     key_hook(int keycode, t_game *game);
-void    rotate_player(t_game *game, double rot_speed);
+int     key_press(int keycode, t_game *game);
+int		key_release(int keycode, t_game *game);
+void	move_player(t_game *game);
+//void	rotate_player(t_game *game, double rot_speed);
 
 /* ************************************************************************** */
 /* CLEANUP & ERROR HANDLING                                                   */

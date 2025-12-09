@@ -93,6 +93,7 @@ void	count_elements(t_game *game)
 				map->spawncount++;
 				map->playery = map->y;
 				map->playerx = map->x;
+				map->player_dir = map->grid[map->y][map->x];
 			}
 		}
 	}
