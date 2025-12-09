@@ -1,5 +1,5 @@
 #include "cub3d.h"
-
+//hello
 static void init_graphics(t_game *game)
 {
 	//mlx initialization
