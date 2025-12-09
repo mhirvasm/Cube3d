@@ -133,6 +133,7 @@ void    draw_player(t_game *game);
 void	draw_square(t_game *game, int x, int y, int color);
 void	clear_image(t_game *game);
 void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
+void    init_ray(t_game *game);
 
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */
