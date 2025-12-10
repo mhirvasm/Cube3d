@@ -129,6 +129,7 @@ void draw_player_dir(t_game *game)
 int	render_frame(t_game *game)
 {
 	draw_2d_map(game);
+	raycast(game);
 	draw_player(game);
 	draw_player_dir(game);
 	move_player(game);

@@ -133,7 +133,11 @@ void    draw_player(t_game *game);
 void	draw_square(t_game *game, int x, int y, int color);
 void	clear_image(t_game *game);
 void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
-void    init_ray(t_game *game);
+void    init_ray(t_ray *ray, t_player *player, int x);
+void	perform_dda(t_game *game, t_ray *ray);
+void    calculate_wall_dist(t_ray *ray);
+void    draw_wall(t_game *game, int x, t_ray *ray);
+void    raycast(t_game *game);
 
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */
