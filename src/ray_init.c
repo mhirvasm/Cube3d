@@ -145,6 +145,8 @@ void draw_wall(t_game *game, int x, t_ray *ray)
 
     // calculate the start of the draw, and end of the draw
     draw_start = -line_height / 2 + HEIGHT / 2;
+
+	//if we are very close to the wall and the value would turnout to be minus value, we initialize the value to 0 coz we cant draw to -1 indexes
     if (draw_start < 0)
         draw_start = 0;
 
@@ -160,7 +162,7 @@ void draw_wall(t_game *game, int x, t_ray *ray)
 
     // draw vertical line (floor, wall, ceiling)
     
-    // this is only drawing a wall for now 
+    // this is only drawing a wall for now
     int y = draw_start;
     while (y < draw_end)
     {
