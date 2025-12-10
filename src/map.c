@@ -13,29 +13,35 @@ void	create_map(t_game *game, char *map_file)
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		error_and_exit("Error. Invalid file", game); //here we take game for cleanup
-//	if (gettextures(map_ptr, fd))
-//		error_and_exit("Error. Invalid file", game);
+	if (gettextures(map_ptr, fd))
+		error_and_exit("Error. Invalid file", game);
 	getmapsize(map_ptr, fd);
-	create_grid(game, map_file);
+	fd = open(map_file, O_RDONLY);
+	if (fd < 0)
+		error_and_exit("Error. Invalid file", game);
+	map_ptr->grid = malloc((map_ptr->height + 1) * sizeof(char *));
+	if (!map_ptr->grid)
+		error_and_exit("Error. Malloc failure", game);
+	create_grid(game, fd);
 	validate_grid(game);
 	validate_path(game);
 	printf("Map created succesfully\n");
 }
 
-void	create_grid(t_game *game, char *map_file)
+void	create_grid(t_game *game, int fd)
 {
-	int		fd;
 	t_map	*map;
 
 	map = &game->map;
 	map->y = 0;
-	fd = open(map_file, O_RDONLY);
-	if (fd < 0)
-		error_and_exit("Error. Invalid file", game);
-	map->grid = malloc((map->height + 1) * sizeof(char *));
-	if (!map->grid)
-		error_and_exit("Error. Malloc failure", game);
-	map->line = NULL;
+	while (1)
+	{
+		map->line = get_next_line(fd);
+		if (map->line[0] == '\n')
+			break ;
+		free(map->line);
+	}
+	free(map->line);
 	while (map->y < map->height)
 	{
 		map->line = get_next_line(fd);

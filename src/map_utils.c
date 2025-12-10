@@ -4,6 +4,7 @@
 void	getmapsize(t_map *map, int fd)
 {
 	map->height = 0;
+	map->line = NULL;
 	while (1)
 	{
 		map->line = get_next_line(fd);
@@ -63,7 +64,7 @@ void	validate_elements(t_game *game)
 		&& map->grid[map->y][map->x] != 'W'
 		&& map->grid[map->y][map->x] != 'E'
 		&& map->grid[map->y][map->x] != 'S')
-		error_and_exit("Error. Invalid elements", game);
+		error_and_exit("Error. Invalid elements1", game);
 	if ((map->x == 0 && map->grid[map->y][map->x] != ' '
 		&& map->grid[map->y][map->x] != '1') 
 		|| ((map->x != 0 && map->grid[map->y][map->x - 1] &&  map->grid[map->y][map->x - 1] == ' '
@@ -98,7 +99,10 @@ void	count_elements(t_game *game)
 		}
 	}
 	if (map->spawncount != 1)
-		error_and_exit("Error. Invalid elements", game);
+	{
+		printf("%d\n", map->spawncount);
+		error_and_exit("Error. Invalid elements2", game);
+	}
 }
 
 void	flood_fill(t_map *copy, int x, int y)

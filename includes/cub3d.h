@@ -31,6 +31,12 @@
 # define MOVESPEED 0.01
 # define ROTSPEED 0.01
 
+# define NORTH 0
+# define SOUTH 1
+# define EAST 2
+# define WEST 3
+# define FLOOR 4
+# define CEILING 5
 
 
 typedef struct s_vector
@@ -68,12 +74,7 @@ typedef struct s_map
 	char	**grid;
 	char	player_dir;
 	int		spawncount;
-	char	*northtexture;
-	char	*southtexture;
-	char	*easttexture;
-	char	*westtexture;
-	char	*floor;
-	char	*ceiling;
+	char	**textures;
 }	t_map;
 
 typedef struct s_player
@@ -118,7 +119,7 @@ void    init_player_vectors(t_player *player, t_map *map);
 int     check_extension(char *argv);
 int		gettextures(t_map *map, int fd);
 void    create_map(t_game *game, char *map_file);
-void    create_grid(t_game *game, char *map_file);
+void    create_grid(t_game *game, int fd);
 void    getmapsize(t_map *map, int fd);
 
 /* ************************************************************************** */

@@ -4,18 +4,26 @@ void	free_map(t_map *map)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (map->grid)
     {
-        while (map->grid[i])
+        while (map->grid[++i])
         {
             free(map->grid[i]);
             map->grid[i] = NULL; // countering double frees
-            i++;
         }
         free(map->grid);
         map->grid = NULL;
     }
+	i = -1;
+	if (map->textures)
+	{
+		while (map->textures[++i])
+		{
+			free(map->textures[i]);
+			map->textures[i] = NULL;
+		}
+	}
     if (map->line)
     {
         free(map->line);
