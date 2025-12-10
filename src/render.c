@@ -125,6 +125,39 @@ void draw_player_dir(t_game *game)
 	draw_line(game, start, end, 0xFFFF00);
 }
 
+//drawing rays to maps
+static	void draw_fov(t_game *game)
+{
+    int         x;
+    t_ray       ray;
+    t_vector    start;
+    t_vector    end;
+
+    
+    x = 0;
+    while (x < WIDTH)
+    {
+
+        init_ray(&ray, &game->player, x);
+
+
+        perform_dda(game, &ray);
+
+
+        start.x = game->player.pos.x * BLOCK;
+        start.y = game->player.pos.y * BLOCK;
+
+       
+        end.x = ray.map.x * BLOCK + (BLOCK / 2);
+        end.y = ray.map.y * BLOCK + (BLOCK / 2);
+
+
+        draw_line(game, start, end, 0x00FF00);
+		//lets do not draw all lines
+        x += 50; 
+    }
+}
+
 //render the frame (put image to window)
 int	render_frame(t_game *game)
 {
@@ -132,6 +165,7 @@ int	render_frame(t_game *game)
 	raycast(game);
 	draw_player(game);
 	draw_player_dir(game);
+	draw_fov(game);
 	move_player(game);
 	//draw  map
 	//draw player
