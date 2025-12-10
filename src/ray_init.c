@@ -140,11 +140,10 @@ void draw_wall(t_game *game, int x, t_ray *ray)
     int draw_end;
     int color;
 
-    // 1. Laske seinän korkeus ruudulla
-    // (Mitä kauempana, sitä pienempi luku)
+    //calculate the height of the wall, the smaller the number, more far the wall is located
     line_height = (int)(HEIGHT / ray->wall_dist);
 
-    // 2. Laske piirron aloitus- ja lopetuskohta (keskitetään pystysuunnassa)
+    // calculate the start of the draw, and end of the draw
     draw_start = -line_height / 2 + HEIGHT / 2;
     if (draw_start < 0)
         draw_start = 0;
@@ -153,17 +152,15 @@ void draw_wall(t_game *game, int x, t_ray *ray)
     if (draw_end >= HEIGHT)
         draw_end = HEIGHT - 1;
 
-    // 3. Valitse väri
-    // Tehdään varjostus: Y-seinät ovat tummempia
+    // colouring, and shadowing, "Y  walls" a bit darker 
     if (ray->side == 0)
         color = 0x00FF00; // Vihreä (X-seinä)
     else
         color = 0x007700; // Tumma vihreä (Y-seinä)
 
-    // 4. Piirrä pystyviiva (Katto, Seinä, Lattia)
+    // draw vertical line (floor, wall, ceiling)
     
-    // TÄSSÄ VOIT KÄYTTÄÄ SILMUKKAA TAI ERILLISTÄ VERTIKAALISTA PIIRTOFUNKTIOTA
-    // Yksinkertaistettu versio (piirtää vain seinän):
+    // this is only drawing a wall for now 
     int y = draw_start;
     while (y < draw_end)
     {
