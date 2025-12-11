@@ -12,20 +12,39 @@ int	check_extension(char *arg)
 	return (0);
 }
 
+int	line_check(char *line, char	c, char d)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == ' ' || line[i] == '\t' || line[i] == '\f'
+			|| line[i] == '\v' || line[i] == '\r')
+			i++;
+		else if (line[i] == c && line[i + 1] == d)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 static int	texture_strdup(t_map *map, char *line)
 {
-	if (line[0] == 'N')
+	if (!line_check(line, 'N', 'O'))
 		map->textures[NORTH] = ft_strdup(line);
-	else if (line[0] == 'S')
+	else if (!line_check(line, 'S', 'O'))
 		map->textures[SOUTH] = ft_strdup(line);
-	else if (line[0] == 'E')
+	else if (!line_check(line, 'E', 'A'))
 		map->textures[EAST] = ft_strdup(line);
-	else if (line[0] == 'W')
+	else if (!line_check(line, 'W', 'E'))
 		map->textures[WEST] = ft_strdup(line);
-	else if (line[0] == 'F')
+	else if (!line_check(line, 'F', ' '))
 		map->textures[FLOOR] = ft_strdup(line);
-	else if (line[0] == 'C')
+	else if (!line_check(line, 'C', ' '))
 		map->textures[CEILING] = ft_strdup(line);
+	else if (!line_check(line, '\n', '\0'))
+		return (0);
 	else
 	{
 		free(line);
@@ -35,7 +54,7 @@ static int	texture_strdup(t_map *map, char *line)
 	return (0);
 }
 
-static void	texture_truncate(char **textures)
+static void	texture_truncate(t_game *game, char **textures)
 {
 	int		i;
 	int		j;
@@ -51,6 +70,8 @@ static void	texture_truncate(char **textures)
 			if (textures[i][j] == '/')
 			{
 				line = malloc((ft_strlen(textures[i]) - j) * sizeof(char));
+				if (!line)
+					error_and_exit("Error. Malloc failure.", game);
 				l = 0;
 				while (textures[i][j])
 					line[l++] = textures[i][j++];
@@ -65,29 +86,29 @@ static void	texture_truncate(char **textures)
 	}
 }
 
-int	gettextures(t_map *map, int fd)
+int	gettextures(t_game *game, int fd)
 {
 	char	*line;
-	int		i;
 
-	i = 0;
-	map->textures = malloc(6 * sizeof(char *));
+	game->map.textures = malloc(6 * sizeof(char *));
+	if (!game->map.textures)
+		error_and_exit("Error. Malloc failure.", game);
 	while (1)
 	{
 		line = get_next_line(fd);
-		if (line[0] == '\n')
-			break ;
-		if (texture_strdup(map, line))
+		if (texture_strdup(&game->map, line))
 			return (1);
+		if (!line_check(line, 'C', ' '))
+			break ;
 		free(line);
 	}
-	if (!(map->textures[NORTH] && map->textures[SOUTH]
-		&& map->textures[EAST] && map->textures[WEST]
-		&& map->textures[FLOOR] && map->textures[CEILING]))
-	{
+	if (line)
 		free(line);
+	line = NULL;
+	if (!(game->map.textures[NORTH] && game->map.textures[SOUTH]
+		&& game->map.textures[EAST] && game->map.textures[WEST]
+		&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
 		return (1);
-	}
-	texture_truncate(map->textures);
+	texture_truncate(game, game->map.textures);
 	return (0);
 }

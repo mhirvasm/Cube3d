@@ -12,13 +12,13 @@ void	create_map(t_game *game, char *map_file)
 
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file", game); //here we take game for cleanup
-	if (gettextures(map_ptr, fd))
-		error_and_exit("Error. Invalid file", game);
+		error_and_exit("Error. Invalid file1", game); //here we take game for cleanup
+	if (gettextures(game, fd))
+		error_and_exit("Error. Invalid file2.0", game);
 	getmapsize(map_ptr, fd);
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file", game);
+		error_and_exit("Error. Invalid file3", game);
 	map_ptr->grid = malloc((map_ptr->height + 1) * sizeof(char *));
 	if (!map_ptr->grid)
 		error_and_exit("Error. Malloc failure", game);
@@ -37,7 +37,7 @@ void	create_grid(t_game *game, int fd)
 	while (1)
 	{
 		map->line = get_next_line(fd);
-		if (map->line[0] == '\n')
+		if (!line_check(map->line, 'C', ' '))
 			break ;
 		free(map->line);
 	}
@@ -45,6 +45,11 @@ void	create_grid(t_game *game, int fd)
 	while (map->y < map->height)
 	{
 		map->line = get_next_line(fd);
+		while (line_check(map->line, '\n', '\0'))
+		{
+			free(map->line);
+			map->line = get_next_line(fd);
+		}
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
 			error_and_exit("Error. Strdup failure", game);

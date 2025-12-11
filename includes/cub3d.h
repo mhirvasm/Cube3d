@@ -117,7 +117,8 @@ void    init_player_vectors(t_player *player, t_map *map);
 /* MAP PARSING & READING                                                      */
 /* ************************************************************************** */
 int     check_extension(char *argv);
-int		gettextures(t_map *map, int fd);
+int		gettextures(t_game *game, int fd);
+int		line_check(char *line, char c, char d);
 void    create_map(t_game *game, char *map_file);
 void    create_grid(t_game *game, int fd);
 void    getmapsize(t_map *map, int fd);
