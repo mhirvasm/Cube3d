@@ -220,7 +220,7 @@ void draw_2d_map(t_game *game)
 	
 	if (tile_size < 1)
 		tile_size = 1;
-
+	
     // draw using the tilesize
     int y = 0;
     while (game->map.grid[y])
