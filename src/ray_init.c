@@ -139,6 +139,7 @@ void draw_wall(t_game *game, int x, t_ray *ray)
     int draw_start;
     int draw_end;
     int color;
+    int y;
 
     //calculate the height of the wall, the smaller the number, more far the wall is located
     line_height = (int)(HEIGHT / ray->wall_dist);
@@ -161,12 +162,25 @@ void draw_wall(t_game *game, int x, t_ray *ray)
         color = 0x007700; // Tumma vihreä (Y-seinä)
 
     // draw vertical line (floor, wall, ceiling)
-    
+    //drawing ceiling here
+    y = 0;
+    while (y < draw_start)
+    {
+        my_mlx_pixel_put(game, x, y, 0x87CEEB);
+        y++;
+    }
+
     // this is only drawing a wall for now
-    int y = draw_start;
+    y = draw_start;
     while (y < draw_end)
     {
         my_mlx_pixel_put(game, x, y, color);
+        y++;
+    }
+    y = draw_end;
+    while (y < HEIGHT)
+    {
+        my_mlx_pixel_put(game, x, y, 0x333333);
         y++;
     }
 }

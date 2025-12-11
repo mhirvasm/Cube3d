@@ -161,8 +161,9 @@ static	void draw_fov(t_game *game)
 //render the frame (put image to window)
 int	render_frame(t_game *game)
 {
-	draw_2d_map(game);
+	//draw_2d_map(game);
 	raycast(game);
+	draw_2d_map(game);
 	draw_player(game);
 	draw_player_dir(game);
 	draw_fov(game);

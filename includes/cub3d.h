@@ -11,9 +11,9 @@
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
-# define WIDTH 1980
-# define HEIGHT 1280
-# define BLOCK 32
+# define WIDTH 1280
+# define HEIGHT 720
+# define BLOCK 64
 # define DEBUG 0
 
 # define WHITE 0xFFFFFF
