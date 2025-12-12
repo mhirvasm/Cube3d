@@ -42,14 +42,17 @@ void	create_grid(t_game *game, int fd)
 		free(map->line);
 	}
 	free(map->line);
-	while (map->y < map->height)
+	while (1)
 	{
 		map->line = get_next_line(fd);
-		while (line_check(map->line, '\n', '\0'))
-		{
-			free(map->line);
+		if (line_check(map->line, '1', '1'))
+			break ;
+		free(map->line);
+	}
+	while (map->y < map->height)
+	{
+		if (map->y != 0)
 			map->line = get_next_line(fd);
-		}
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
 			error_and_exit("Error. Strdup failure", game);

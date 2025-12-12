@@ -28,7 +28,7 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.01
+# define MOVESPEED 0.02
 # define ROTSPEED 0.01
 
 # define NORTH 0

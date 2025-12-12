@@ -17,15 +17,15 @@ int	line_check(char *line, char	c, char d)
 	int	i;
 
 	i = 0;
-	while (line[i])
-	{
-		if (line[i] == ' ' || line[i] == '\t' || line[i] == '\f'
+	while (line[i] == ' ' || line[i] == '\t' || line[i] == '\f'
 			|| line[i] == '\v' || line[i] == '\r')
 			i++;
-		else if (line[i] == c && line[i + 1] == d)
-			return (0);
-		i++;
-	}
+	if (line[i] == '\n')
+		return (0);
+	if (line[i] == '1')
+		return (1);
+	if (line[i] == c && line[i + 1] == d)
+		return (0);
 	return (1);
 }
 
@@ -46,11 +46,7 @@ static int	texture_strdup(t_map *map, char *line)
 	else if (!line_check(line, '\n', '\0'))
 		return (0);
 	else
-	{
-		free(line);
 		return (1);
-	}
-	map->textures[6] = NULL;
 	return (0);
 }
 
@@ -90,14 +86,17 @@ int	gettextures(t_game *game, int fd)
 {
 	char	*line;
 
-	game->map.textures = malloc(6 * sizeof(char *));
+	game->map.textures = malloc(7 * sizeof(char *));
 	if (!game->map.textures)
 		error_and_exit("Error. Malloc failure.", game);
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (texture_strdup(&game->map, line))
+		{
+			free(line);
 			return (1);
+		}
 		if (!line_check(line, 'C', ' '))
 			break ;
 		free(line);
@@ -105,6 +104,7 @@ int	gettextures(t_game *game, int fd)
 	if (line)
 		free(line);
 	line = NULL;
+	game->map.textures[6] = NULL;
 	if (!(game->map.textures[NORTH] && game->map.textures[SOUTH]
 		&& game->map.textures[EAST] && game->map.textures[WEST]
 		&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
