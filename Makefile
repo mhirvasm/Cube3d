@@ -11,7 +11,7 @@ IFLAGS		= -I$(INCLUDES) -I$(LIBFT_DIR)
 LIBS        = -Llibft -lft
 
 # Files
-SRC     = src/main.c src/map.c src/map_utils.c src/utils.c src/cleanup.c src/init.c src/render.c src/input.c
+SRC     = src/main.c src/map.c src/map_utils.c src/utils.c src/cleanup.c src/init.c src/render.c src/input.c src/ray_init.c
 OBJ     = $(SRC:.c=.o)
 
 # Libft

@@ -24,9 +24,11 @@ void	create_grid(t_game *game, char *map_file)
 {
 	int		fd;
 	t_map	*map;
+	int		current_len; // new variable 
 
 	map = &game->map;
 	map->y = 0;
+	map->width = 0; // initialize 
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		error_and_exit("Error. Invalid file", game);
@@ -37,6 +39,16 @@ void	create_grid(t_game *game, char *map_file)
 	while (map->y < map->height)
 	{
 		map->line = get_next_line(fd);
+		// --- NEW LOGIC BEGINS ---
+		// Calculate the length of current line
+		current_len = ft_strlen(map->line);
+		if (map->line[current_len - 1] == '\n')
+			current_len--; // substract the newline from len
+		
+		// If this line is "longer" than the previous one, update it!
+		if (current_len > map->width)
+			map->width = current_len;
+		// --- NEW LOGIC ENDS ---
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
 			error_and_exit("Error. Strdup failure", game);
