@@ -29,14 +29,20 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.01
+# define MOVESPEED 0.02
 # define ROTSPEED 0.01
 
-#define MM_SIZE 200        // minimap size in pixels
-#define MM_TILE 10         // one tile size in minimap
-#define MM_OFFSET_X 20     // distance from left side
-#define MM_OFFSET_Y 20     // distance from up
-#define MM_VIEW_DIST 10    // how many tiles can be seen
+# define NORTH 0
+# define SOUTH 1
+# define EAST 2
+# define WEST 3
+# define FLOOR 4
+# define CEILING 5
+# define MM_SIZE 200        // minimap size in pixels
+# define MM_TILE 10         // one tile size in minimap
+# define MM_OFFSET_X 20     // distance from left side
+# define MM_OFFSET_Y 20     // distance from up
+# define MM_VIEW_DIST 10    // how many tiles can be seen
 
 
 typedef struct s_vector
@@ -64,16 +70,17 @@ typedef struct s_ray
 
 typedef struct s_map
 {
-	char	*line;
-	int		height;
-    int     width;
-	int		y;
-	int		x;
-	int		playery;
-	int		playerx;
-	char	**grid;
-	char	player_dir;
-	int		spawncount;
+	char		*line;
+	int			height;
+    int			width;
+	int			y;
+	int			x;
+	int			playery;
+	int			playerx;
+	char		**grid;
+	char		player_dir;
+	int			spawncount;
+	char		**textures;
 }	t_map;
 
 typedef struct s_player
@@ -116,8 +123,11 @@ void    init_player_vectors(t_player *player, t_map *map);
 /* MAP PARSING & READING                                                      */
 /* ************************************************************************** */
 int     check_extension(char *argv);
+int		gettextures(t_game *game, int fd);
+void	get_colors(t_game *game, char **colors, int fd);
+int		line_check(char *line, char c, char d);
 void    create_map(t_game *game, char *map_file);
-void    create_grid(t_game *game, char *map_file);
+void    create_grid(t_game *game, int fd);
 void    getmapsize(t_map *map, int fd);
 
 /* ************************************************************************** */
