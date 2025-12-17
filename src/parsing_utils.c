@@ -50,7 +50,7 @@ static int	texture_strdup(t_map *map, char *line)
 	return (0);
 }
 
-static void	texture_truncate(t_game *game, char **textures)
+static void	texture_truncate(t_game *game, char **textures, int fd)
 {
 	int		i;
 	int		j;
@@ -58,7 +58,7 @@ static void	texture_truncate(t_game *game, char **textures)
 	char	*line;
 
 	i = -1;
-	while (textures[++i])
+	while (textures[++i] && i <= 3)
 	{
 		j = 0;
 		while (textures[i][j])
@@ -67,7 +67,10 @@ static void	texture_truncate(t_game *game, char **textures)
 			{
 				line = malloc((ft_strlen(textures[i]) - j) * sizeof(char));
 				if (!line)
+				{
+					close(fd);
 					error_and_exit("Error. Malloc failure.", game);
+				}
 				l = 0;
 				while (textures[i][j])
 					line[l++] = textures[i][j++];
@@ -88,7 +91,10 @@ int	gettextures(t_game *game, int fd)
 
 	game->map.textures = malloc(7 * sizeof(char *));
 	if (!game->map.textures)
+	{
+		close(fd);
 		error_and_exit("Error. Malloc failure.", game);
+	}
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -109,6 +115,7 @@ int	gettextures(t_game *game, int fd)
 		&& game->map.textures[EAST] && game->map.textures[WEST]
 		&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
 		return (1);
-	texture_truncate(game, game->map.textures);
+	texture_truncate(game, game->map.textures, fd);
+	get_colors(game, game->map.textures, fd);
 	return (0);
 }

@@ -64,17 +64,17 @@ typedef struct s_ray
 
 typedef struct s_map
 {
-	char	*line;
-	int		height;
-    int     width;
-	int		y;
-	int		x;
-	int		playery;
-	int		playerx;
-	char	**grid;
-	char	player_dir;
-	int		spawncount;
-	char	**textures;
+	char		*line;
+	int			height;
+    int			width;
+	int			y;
+	int			x;
+	int			playery;
+	int			playerx;
+	char		**grid;
+	char		player_dir;
+	int			spawncount;
+	char		**textures;
 }	t_map;
 
 typedef struct s_player
@@ -118,6 +118,7 @@ void    init_player_vectors(t_player *player, t_map *map);
 /* ************************************************************************** */
 int     check_extension(char *argv);
 int		gettextures(t_game *game, int fd);
+void	get_colors(t_game *game, char **colors, int fd);
 int		line_check(char *line, char c, char d);
 void    create_map(t_game *game, char *map_file);
 void    create_grid(t_game *game, int fd);

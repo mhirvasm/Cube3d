@@ -21,7 +21,10 @@ void	create_map(t_game *game, char *map_file)
 		error_and_exit("Error. Invalid file3", game);
 	map_ptr->grid = malloc((map_ptr->height + 1) * sizeof(char *));
 	if (!map_ptr->grid)
+	{
+		close(fd);
 		error_and_exit("Error. Malloc failure", game);
+	}
 	create_grid(game, fd);
 	validate_grid(game);
 	validate_path(game);
@@ -55,7 +58,10 @@ void	create_grid(t_game *game, int fd)
 			map->line = get_next_line(fd);
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
+		{
+			close(fd);
 			error_and_exit("Error. Strdup failure", game);
+		}
 		map->grid[map->y][(int)ft_strlen(map->grid[map->y]) - 1] = '\0';
 		free(map->line);
 		map->line = NULL;

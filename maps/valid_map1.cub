@@ -2,8 +2,8 @@ NO ./path_to_texture
 SO ./path_to_texture
 EA ./path_to_texture
 WE ./path_to_texture
-F ./path_to_texture
-C ./path_to_texture
+F 40, 50, 100
+C 0, 255, 220
 
 
 
@@ -29,3 +29,11 @@ C ./path_to_texture
 1000000000000001
 10000N0000000001
 1111111111111111
+
+
+
+
+
+
+
+
