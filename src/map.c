@@ -38,6 +38,7 @@ void	create_grid(t_game *game, int fd)
 
 	map = &game->map;
 	map->y = 0;
+	map->width = 0; // initialize 
 	while (1)
 	{
 		map->line = get_next_line(fd);
@@ -53,27 +54,15 @@ void	create_grid(t_game *game, int fd)
 			break ;
 		free(map->line);
 	}
-	map->width = 0; // initialize 
-	fd = open(map_file, O_RDONLY);
-	if (fd < 0)
-		error_and_exit("Error. Invalid file", game);
-	map->grid = malloc((map->height + 1) * sizeof(char *));
-	if (!map->grid)
-		error_and_exit("Error. Malloc failure", game);
-	map->line = NULL;
 	while (map->y < map->height)
 	{
-		map->line = get_next_line(fd);
-		// --- NEW LOGIC BEGINS ---
-		// Calculate the length of current line
+		if (map->y != 0)
+			map->line = get_next_line(fd);
 		current_len = ft_strlen(map->line);
 		if (map->line[current_len - 1] == '\n')
 			current_len--; // substract the newline from len
-		
-		// If this line is "longer" than the previous one, update it!
 		if (current_len > map->width)
 			map->width = current_len;
-		// --- NEW LOGIC ENDS ---
 		map->grid[map->y] = ft_strdup(map->line);
 		if (!map->grid[map->y])
 		{
