@@ -11,8 +11,8 @@
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
-# define WIDTH 1280
-# define HEIGHT 720
+# define WIDTH 1920
+# define HEIGHT 1280
 # define BLOCK 64
 # define DEBUG 0
 
@@ -29,8 +29,8 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.02
-# define ROTSPEED 0.01
+# define MOVESPEED 0.1
+# define ROTSPEED 0.05
 
 # define NORTH 0
 # define SOUTH 1
@@ -81,6 +81,8 @@ typedef struct s_map
 	char		player_dir;
 	int			spawncount;
 	char		**textures;
+    int         floor_color;
+    int         ceiling_color;
 }	t_map;
 
 typedef struct s_player
