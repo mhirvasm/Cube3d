@@ -57,6 +57,8 @@ void	move_player(t_game *game)
 		rotate_player(game, -ROTSPEED);
 	if (p->key_up)
 	{
+		printf("%f \n", p->dir.y);
+		
 		new_x = p->pos.x + p->dir.x * MOVESPEED;
 		new_y = p->pos.y + p->dir.y * MOVESPEED;
 		if (!is_wall(game, new_x, p->pos.y)) p->pos.x = new_x;

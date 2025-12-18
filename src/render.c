@@ -1,7 +1,5 @@
 #include "cub3d.h"
 
-//pixel_put function
-//writes pixel straightly to the memoryaddress  (fast)
 void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
 	char	*dst;
@@ -12,19 +10,18 @@ void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-//draw the blocks (rectangles)
 void	draw_square(t_game *game, int x, int y, int size, int color)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (i < size - 1) // -1 so we have the "grid effect" and the blocks dont melt to each  other.
+	while (i < size - 1)
 	{
 		j = 0;
 		while (j < size - 1)
 		{
-			my_mlx_pixel_put(game, x * size + i, y * size + j, color); //x*block and y*block transforms map coordinates into pixel coordinates
+			my_mlx_pixel_put(game, x * size + i, y * size + j, color);
 			j++;
 		}
 		i++;
@@ -72,12 +69,11 @@ static void draw_player_dir(t_game *game, int tile_size)
 	draw_line(game, start, end, 0xFFFF00);
 }
 
-//draw the player
 void draw_player(t_game *game, int tile_size)
 {
-    int px = (int)(game->player.pos.x * tile_size); // Multiply with dynamic size
+    int px = (int)(game->player.pos.x * tile_size);
     int py = (int)(game->player.pos.y * tile_size);
-    int size = tile_size / 3; // PLayer size related to tilesize
+    int size = tile_size / 3;
     if (size < 2) size = 2;
 
     int y = -size;
@@ -93,7 +89,6 @@ void draw_player(t_game *game, int tile_size)
     }
 }
 
-//drawing rays to maps
 static	void draw_fov(t_game *game, int tile_size)
 {
     int         x;
@@ -121,7 +116,6 @@ static	void draw_fov(t_game *game, int tile_size)
 
 
         draw_line(game, start, end, 0x00FF00);
-		//lets do not draw all lines
         x += 50; 
     }
 }
@@ -133,7 +127,6 @@ static void draw_minimap_square(t_game *game, int x, int y, int color)
     int i;
     int j;
 
-    // x and y tile coordinates transformed into pixels 
     int pixel_x = MM_OFFSET_X + (x * MM_TILE);
     int pixel_y = MM_OFFSET_Y + (y * MM_TILE);
 
@@ -157,28 +150,24 @@ static void draw_minimap(t_game *game)
     int map_y;
     int map_x;
 
-    // Loop through minimap grid
     y = -MM_VIEW_DIST;
     while (y <= MM_VIEW_DIST)
     {
         x = -MM_VIEW_DIST;
         while (x <= MM_VIEW_DIST)
         {
-            // calculate coordinates on the map
             map_y = (int)game->player.pos.y + y;
             map_x = (int)game->player.pos.x + x;
 
-            // Check if its "inside" of the map
             if (map_y >= 0 && map_y < game->map.height &&
                 map_x >= 0 && map_x < (int)ft_strlen(game->map.grid[map_y]))
             {
-                // On map --> Check if its wall or floor
                 if (game->map.grid[map_y][map_x] == '1')
-                    draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0xFFFFFF); // Seinä
-                else if (game->map.grid[map_y][map_x] != ' ') // Vältetään tyhjiä kohtia
-                    draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x000000); // Lattia
+                    draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0xFFFFFF);
+                else if (game->map.grid[map_y][map_x] != ' ')
+                    draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x000000);
                 else
-                     draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x222222); // Tyhjyys
+                     draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x222222);
             }
             x++;
         }
@@ -241,11 +230,10 @@ void draw_2d_map(t_game *game)
     draw_player_dir(game, tile_size);
 }
 
-//render the frame (put image to window)
 int	render_frame(t_game *game)
 {
 	move_player(game);
-	if (DEBUG == 0) //DEBUG MACRO in the .h file!
+	if (DEBUG == 0)
 	{
 	raycast(game);
 	draw_minimap(game);
@@ -254,9 +242,6 @@ int	render_frame(t_game *game)
 	{
 		draw_2d_map(game);
 	}
-	//draw  map
-	//draw player
-	//draw the image to window
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
