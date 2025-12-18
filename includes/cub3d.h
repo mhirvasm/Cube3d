@@ -81,8 +81,6 @@ typedef struct s_map
 	char		player_dir;
 	int			spawncount;
 	char		**textures;
-    int         floor_color;
-    int         ceiling_color;
 }	t_map;
 
 typedef struct s_player
@@ -128,6 +126,8 @@ int     check_extension(char *argv);
 int		gettextures(t_game *game, int fd);
 void	get_colors(t_game *game, char **colors, int fd);
 int		line_check(char *line, char c, char d);
+int		parse_and_validate_rgb(t_game *game, char *texture);
+int		encode_rgb(int r, int g, int b);
 void    create_map(t_game *game, char *map_file);
 void    create_grid(t_game *game, int fd);
 void    getmapsize(t_map *map, int fd);

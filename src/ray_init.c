@@ -166,7 +166,7 @@ void draw_wall(t_game *game, int x, t_ray *ray)
     y = 0;
     while (y < draw_start)
     {
-		color = parse_and_validate_rgb(game->map.textures[CEILING]);
+		color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
         my_mlx_pixel_put(game, x, y, color);
         y++;
     }
@@ -175,21 +175,20 @@ void draw_wall(t_game *game, int x, t_ray *ray)
     y = draw_start;
     while (y < draw_end)
     {
-        my_mlx_pixel_put(game, x, y, color);
 		if (ray->direction.x < 0 && ray->step.x == -1) //-1 for left
-			mlx_xpm_file_to_image(game, game->map.textures[WEST], x * BLOCK, y * BLOCK);
+			mlx_xpm_file_to_image(game, game->map.textures[WEST], &x, &y);
 		else if (ray->direction.x < 0 && ray->step.x == 1) //1 for rright
-			mlx_xpm_file_to_image(game, game->map.textures[EAST], x * BLOCK, y * BLOCK);
+			mlx_xpm_file_to_image(game, game->map.textures[EAST], &x, &y);
 		else if (ray->direction.y < 0 && ray->step.y == -1) //-1 for up
-			mlx_xpm_file_to_image(game, game->map.textures[NORTH], x * BLOCK, y * BLOCK);
+			mlx_xpm_file_to_image(game, game->map.textures[NORTH], &x, &y);
 		else if (ray->direction.y < 0 && ray->step.y == 1) //1 for down
-			mlx_xpm_file_to_image(game, game->map.textures[SOUTH], x * BLOCK, y * BLOCK);
+			mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &x, &y);
         y++;
     }
     y = draw_end;
     while (y < HEIGHT)
     {
-		color = parse_and_validate_rgb(game->map.textures[FLOOR]);
+		color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
         my_mlx_pixel_put(game, x, y, color);
         y++;
     }
