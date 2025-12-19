@@ -116,12 +116,6 @@ int	gettextures(t_game *game, int fd)
 		&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
 		return (1);
 	texture_truncate(game, game->map.textures, fd);
-	int	i = 0;
-	while (i <= 3)
-	{
-		printf("%s\n", game->map.textures[i]);
-		i++;
-	}
 	get_colors(game, game->map.textures, fd);
 	return (0);
 }

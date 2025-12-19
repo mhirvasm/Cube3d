@@ -91,6 +91,8 @@ void	validate_path(t_game *game)
 		error_and_exit("Error. Memory allocation failed", game);
 	copy->height = map->height;
 	copy->width = map->width;
+	copy->textures = NULL;
+	copy->line = NULL;
 	copy->grid = malloc((map->height + 1) * sizeof(char *));
 	if (!copy->grid)
 	{
