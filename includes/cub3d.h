@@ -66,6 +66,9 @@ typedef struct s_ray
     t_point     step;       // direction (1 or -1)
     double      wall_dist;  // final distance
     int         side;       // (flag) 0 = vertical wall, 1 for horizontal
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
 } t_ray;
 
 typedef struct s_map
@@ -81,6 +84,9 @@ typedef struct s_map
 	char		player_dir;
 	int			spawncount;
 	char		**textures;
+
+	int			color;
+
 }	t_map;
 
 typedef struct s_player
@@ -112,9 +118,9 @@ typedef struct s_img
 
 typedef struct s_game
 {
-	t_map	map;
+	  t_map	map;
 
-	void	*mlx;
+	  void	*mlx;
     void	*win;
     void    *img;
 
@@ -173,7 +179,7 @@ void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 void    init_ray(t_ray *ray, t_player *player, int x);
 void	perform_dda(t_game *game, t_ray *ray);
 void    calculate_wall_dist(t_ray *ray);
-void    draw_wall(t_game *game, int x, t_ray *ray);
+void    draw_walls(t_game *game, int x, t_ray *ray);
 void    raycast(t_game *game);
 
 /* ************************************************************************** */

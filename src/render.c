@@ -235,8 +235,8 @@ int	render_frame(t_game *game)
 	move_player(game);
 	if (DEBUG == 0)
 	{
-	raycast(game);
-	draw_minimap(game);
+		raycast(game);
+		draw_minimap(game);
 	}
 	if (DEBUG  == 1)
 	{
