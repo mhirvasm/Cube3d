@@ -65,16 +65,16 @@ static void	texture_truncate(t_game *game, char **textures, int fd)
 		{
 			if (textures[i][j] == '.')
 			{
-				line = malloc((ft_strlen(textures[i]) - j - 1) * sizeof(char));
+				line = malloc((ft_strlen(textures[i]) - j) * sizeof(char));
 				if (!line)
 				{
 					close(fd);
 					error_and_exit("Error. Malloc failure.", game);
 				}
 				l = 0;
-				while (textures[i][j] != '\n')
+				while (textures[i][j])
 					line[l++] = textures[i][j++];
-				line[l] = '\0';
+				line[l - 1] = '\0';
 				free(textures[i]);
 				textures[i] = ft_strdup(line);
 				free(line);

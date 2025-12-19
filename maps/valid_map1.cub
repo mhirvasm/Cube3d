@@ -1,7 +1,7 @@
 NO ./cactus64.xpm
-SO ./cactus64.xpm
-EA ./cactus64.xpm
-WE ./cactus64.xpm
+WE ./west
+SO ./south
+EA ./east
 F 40, 50, 100
 C 0, 255, 255
 

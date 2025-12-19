@@ -24,11 +24,11 @@ void	free_map(t_map *map)
 			map->textures[i] = NULL;
 		}
 	}
-    if (map->line)
-    {
-        free(map->line);
-        map->line = NULL;
-    }
+	if (map->line)
+	{
+		free(map->line);
+		map->line = NULL;
+	}
 }
 
 void	error_and_exit(char *msg, t_game *game)

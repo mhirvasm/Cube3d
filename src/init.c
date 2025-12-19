@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 09:09:04 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/19 12:55:35 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/19 13:57:02 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	init_graphics(t_game *game)
 	if (!game->data)
 		error_and_exit("Error. Image data fetch failed", game);
 }
-
+/*
 static void init_textures(t_game *game)
 {
 	int	i;
@@ -51,14 +51,14 @@ static void init_textures(t_game *game)
                           &game->walls[i].endian);
 	}
 
-}
+}*/
 
 int	init_game(t_game *game, char *map_file)
 {
 	create_map(game, map_file);
 	init_player_vectors(&game->player, &game->map);
 	init_graphics(game);
-	init_textures(game);
+//	init_textures(game);
 	return (0);
 }
 
