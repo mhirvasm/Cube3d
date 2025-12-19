@@ -29,7 +29,6 @@ void	free_map(t_map *map)
         free(map->line);
         map->line = NULL;
     }
-	//dont free the map	here, its part of game
 }
 
 void	error_and_exit(char *msg, t_game *game)

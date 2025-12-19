@@ -165,17 +165,8 @@ void draw_walls(t_game *game, int x, t_ray *ray)
     int y;
 
 
-    // colouring, and shadowing, "Y  walls" a bit darker 
-//	if (ray->side == 0)
-//		color = 0x00FF00; // Vihreä (X-seinä)
-//	else
-//		color = 0x007700; // Tumma vihreä (Y-seinä)
-//
-    // draw vertical line (floor, wall, ceiling)
-    //drawing ceiling here
     color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
     y = 0;
-	color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
     while (y < ray->draw_start)
     {
         my_mlx_pixel_put(game, x, y, color);
@@ -185,17 +176,6 @@ void draw_walls(t_game *game, int x, t_ray *ray)
     // this is only drawing a wall for now
 //	y = ray->draw_start;
 //	while (y < ray->draw_end)
-//	{
-//		if (ray->direction.x < 0 && ray->step.x == -1) //-1 for left
-//			mlx_xpm_file_to_image(game, game->map.textures[WEST], &x, &y);
-//		else if (ray->direction.x < 0 && ray->step.x == 1) //1 for rright
-//			mlx_xpm_file_to_image(game, game->map.textures[EAST], &x, &y);
-//		else if (ray->direction.y < 0 && ray->step.y == -1) //-1 for up
-//			mlx_xpm_file_to_image(game, game->map.textures[NORTH], &x, &y);
-//		else if (ray->direction.y < 0 && ray->step.y == 1) //1 for down
-//			mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &x, &y);
-//		y++;
-//	}
 	y = ray->draw_end;
 	color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
 	while (y < HEIGHT)
