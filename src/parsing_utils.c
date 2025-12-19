@@ -63,16 +63,16 @@ static void	texture_truncate(t_game *game, char **textures, int fd)
 		j = 0;
 		while (textures[i][j])
 		{
-			if (textures[i][j] == '/')
+			if (textures[i][j] == '.')
 			{
-				line = malloc((ft_strlen(textures[i]) - j) * sizeof(char));
+				line = malloc((ft_strlen(textures[i]) - j - 1) * sizeof(char));
 				if (!line)
 				{
 					close(fd);
 					error_and_exit("Error. Malloc failure.", game);
 				}
 				l = 0;
-				while (textures[i][j])
+				while (textures[i][j] != '\n')
 					line[l++] = textures[i][j++];
 				line[l] = '\0';
 				free(textures[i]);
@@ -116,6 +116,12 @@ int	gettextures(t_game *game, int fd)
 		&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
 		return (1);
 	texture_truncate(game, game->map.textures, fd);
+	int	i = 0;
+	while (i <= 3)
+	{
+		printf("%s\n", game->map.textures[i]);
+		i++;
+	}
 	get_colors(game, game->map.textures, fd);
 	return (0);
 }

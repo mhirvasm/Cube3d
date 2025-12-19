@@ -6,7 +6,7 @@
 /*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:05:51 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/18 17:39:43 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:46:47 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	if (ft_atoi(rgb[1]) == 1)
 		return (-1);
 	if (ft_atoi(rgb[2]) == 1)
-	return (-1);
+		return (-1);
 	color = encode_rgb(ft_atoi(rgb[0]), ft_atoi(rgb[1]), ft_atoi(rgb[2]));
 	ft_free(rgb);
 	return (color);

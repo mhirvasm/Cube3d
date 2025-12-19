@@ -7,7 +7,6 @@ void raycast(t_game *game)
 	ft_bzero(&ray, sizeof(t_ray));
     int x = 0;
 
-    
     while (x < WIDTH) 
     {
         //init ray for this position x 
@@ -18,7 +17,7 @@ void raycast(t_game *game)
 		//fix values before draw
 		calculate_wall_dist(&ray);
         //draw
-		draw_wall(game, x, &ray);
+		draw_walls(game, x, &ray);
         x++; //move to next vertical line
     }
 }
@@ -121,6 +120,20 @@ void	perform_dda(t_game *game, t_ray *ray)
 		if (game->map.grid[ray->map.y][ray->map.x] == '1')
 			hit = 1;
 	}
+	if (ray->side == 0)
+	{
+		if (game->player.dir.x == 1)
+			game->map.color = EAST;
+		else
+			game->map.color = WEST;
+	}
+	else
+	{
+		if (game->player.dir.y == 1)
+			game->map.color = NORTH;
+		else
+			game->map.color = SOUTH;
+	}
 }
 
 //in the end of dda, we are "one step too far", so we want to fix the distance values by goin one step back
@@ -131,29 +144,26 @@ void calculate_wall_dist(t_ray *ray)
         ray->wall_dist = (ray->side_dist.x - ray->delta_dist.x);
     else
         ray->wall_dist = (ray->side_dist.y - ray->delta_dist.y);
+    //calculate the height of the wall, the smaller the number, more far the wall is located
+    ray->line_height = (int)(HEIGHT / ray->wall_dist);
+
+    // calculate the start of the draw, and end of the draw
+    ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
+
+	//if we are very close to the wall and the value would turnout to be minus value, we initialize the value to 0 coz we cant draw to -1 indexes
+    if (ray->draw_start < 0)
+        ray->draw_start = 0;
+
+    ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
+    if (ray->draw_end >= HEIGHT)
+        ray->draw_end = HEIGHT - 1;
 }
 
-void draw_wall(t_game *game, int x, t_ray *ray)
+void draw_walls(t_game *game, int x, t_ray *ray)
 {
-    int line_height;
-    int draw_start;
-    int draw_end;
     int color;
     int y;
 
-    //calculate the height of the wall, the smaller the number, more far the wall is located
-    line_height = (int)(HEIGHT / ray->wall_dist);
-
-    // calculate the start of the draw, and end of the draw
-    draw_start = -line_height / 2 + HEIGHT / 2;
-
-	//if we are very close to the wall and the value would turnout to be minus value, we initialize the value to 0 coz we cant draw to -1 indexes
-    if (draw_start < 0)
-        draw_start = 0;
-
-    draw_end = line_height / 2 + HEIGHT / 2;
-    if (draw_end >= HEIGHT)
-        draw_end = HEIGHT - 1;
 
     // colouring, and shadowing, "Y  walls" a bit darker 
 //	if (ray->side == 0)
@@ -164,32 +174,33 @@ void draw_wall(t_game *game, int x, t_ray *ray)
     // draw vertical line (floor, wall, ceiling)
     //drawing ceiling here
     y = 0;
-    while (y < draw_start)
+	color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
+    while (y < ray->draw_start)
     {
-		color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
         my_mlx_pixel_put(game, x, y, color);
         y++;
     }
 
     // this is only drawing a wall for now
-    y = draw_start;
-    while (y < draw_end)
-    {
-		if (ray->direction.x < 0 && ray->step.x == -1) //-1 for left
-			mlx_xpm_file_to_image(game, game->map.textures[WEST], &x, &y);
-		else if (ray->direction.x < 0 && ray->step.x == 1) //1 for rright
-			mlx_xpm_file_to_image(game, game->map.textures[EAST], &x, &y);
-		else if (ray->direction.y < 0 && ray->step.y == -1) //-1 for up
-			mlx_xpm_file_to_image(game, game->map.textures[NORTH], &x, &y);
-		else if (ray->direction.y < 0 && ray->step.y == 1) //1 for down
-			mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &x, &y);
-        y++;
-    }
-    y = draw_end;
-    while (y < HEIGHT)
-    {
-		color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
-        my_mlx_pixel_put(game, x, y, color);
-        y++;
-    }
+//	y = ray->draw_start;
+//	while (y < ray->draw_end)
+//	{
+//		if (ray->direction.x < 0 && ray->step.x == -1) //-1 for left
+//			mlx_xpm_file_to_image(game, game->map.textures[WEST], &x, &y);
+//		else if (ray->direction.x < 0 && ray->step.x == 1) //1 for rright
+//			mlx_xpm_file_to_image(game, game->map.textures[EAST], &x, &y);
+//		else if (ray->direction.y < 0 && ray->step.y == -1) //-1 for up
+//			mlx_xpm_file_to_image(game, game->map.textures[NORTH], &x, &y);
+//		else if (ray->direction.y < 0 && ray->step.y == 1) //1 for down
+//			mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &x, &y);
+//		y++;
+//	}
+	y = ray->draw_end;
+	color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
+	while (y < HEIGHT)
+	{
+		my_mlx_pixel_put(game, x, y, color);
+		y++;
+	}
+//	walls(game, x, ray);
 }

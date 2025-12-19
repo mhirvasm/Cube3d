@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 09:09:04 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/18 09:10:02 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:55:35 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ int	init_game(t_game *game, char *map_file)
 	create_map(game, map_file);
 	init_player_vectors(&game->player, &game->map);
 	init_graphics(game);
+//	game->north =
+//	mlx_xpm_file_to_image(game, game->map.textures[NORTH], &WIDTH, &HEIGHT);
+//	game->south =
+//	mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &WIDTH, &HEIGHT);
+//	game->east =
+//	mlx_xpm_file_to_image(game, game->map.textures[EAST], &WIDTH, &HEIGHT);
+//	game->west =
+//	mlx_xpm_file_to_image(game, game->map.textures[WEST], &WIDTH, &HEIGHT);
 	return (0);
 }
 
