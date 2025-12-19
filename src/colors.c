@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:05:51 by vahdekiv          #+#    #+#             */
 /*   Updated: 2025/12/19 09:46:47 by vahdekiv         ###   ########.fr       */
@@ -72,6 +72,9 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	int		color;
 	int		i;
 	int		j;
+	int		r;
+	int		g;
+	int		b;
 
 	i = 0;
 	color = -1;
@@ -83,18 +86,17 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 		j = 0;
 		while (rgb[i][j])
 		{
-			if (rgb[i][j] == ',')
+			if (rgb[i][j] == ',' || rgb[i][j] == '\n')
 				rgb[i][j] = '\0';
 			j++;
 		}
 		i++;
 	}
-	if (ft_atoi(rgb[0]) == 1)
-		return(-1);
-	if (ft_atoi(rgb[1]) == 1)
-		return (-1);
-	if (ft_atoi(rgb[2]) == 1)
-		return (-1);
+	r = ft_atoi(rgb[0]);
+	g = ft_atoi(rgb[1]);
+	b = ft_atoi(rgb[2]); // validate 0-255 
+	if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255))
+		printf("u faggot\n");
 	color = encode_rgb(ft_atoi(rgb[0]), ft_atoi(rgb[1]), ft_atoi(rgb[2]));
 	ft_free(rgb);
 	return (color);

@@ -29,19 +29,36 @@ static void	init_graphics(t_game *game)
 		error_and_exit("Error. Image data fetch failed", game);
 }
 
+static void init_textures(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	
+	while (i < 4) // NORTH EAST SOUTH WEST = 4 
+	{
+    game->walls[i].img = mlx_xpm_file_to_image(game->mlx, 
+                         game->map.textures[i],
+                         &game->walls[i].width, 
+                         &game->walls[i].height);
+
+    if (!game->walls[i].img)
+        error_and_exit("Error. Texture load failed", game);
+
+    game->walls[i].addr = mlx_get_data_addr(game->walls[i].img,
+                          &game->walls[i].bpp,
+                          &game->walls[i].size_line,
+                          &game->walls[i].endian);
+	}
+
+}
+
 int	init_game(t_game *game, char *map_file)
 {
 	create_map(game, map_file);
 	init_player_vectors(&game->player, &game->map);
 	init_graphics(game);
-//	game->north =
-//	mlx_xpm_file_to_image(game, game->map.textures[NORTH], &WIDTH, &HEIGHT);
-//	game->south =
-//	mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &WIDTH, &HEIGHT);
-//	game->east =
-//	mlx_xpm_file_to_image(game, game->map.textures[EAST], &WIDTH, &HEIGHT);
-//	game->west =
-//	mlx_xpm_file_to_image(game, game->map.textures[WEST], &WIDTH, &HEIGHT);
+	init_textures(game);
 	return (0);
 }
 

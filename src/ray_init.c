@@ -173,6 +173,7 @@ void draw_walls(t_game *game, int x, t_ray *ray)
 //
     // draw vertical line (floor, wall, ceiling)
     //drawing ceiling here
+    color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
     y = 0;
 	color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
     while (y < ray->draw_start)
