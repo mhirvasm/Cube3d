@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:05:51 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/19 09:45:38 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/19 10:25:07 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 		j = 0;
 		while (rgb[i][j])
 		{
-			if (rgb[i][j] == ',')
+			if (rgb[i][j] == ',' || rgb[i][j] == '\n')
 				rgb[i][j] = '\0';
 			j++;
 		}
@@ -95,7 +95,8 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
 	b = ft_atoi(rgb[2]); // validate 0-255 
-	printf("%d %d %d\n", r, g, b);
+	if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255))
+		printf("u faggot\n");
 	color = encode_rgb(ft_atoi(rgb[0]), ft_atoi(rgb[1]), ft_atoi(rgb[2]));
 	ft_free(rgb);
 	return (color);

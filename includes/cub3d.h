@@ -101,7 +101,7 @@ typedef struct s_img
 {
 
     void	*img;
-    char	*data;
+    char	*addr;
     int		bpp;
     int		size_line;
     int		endian;
@@ -124,6 +124,8 @@ typedef struct s_game
     int		endian;
 
     t_img   walls[4]; //0=North, 1=South, 2=West, 3=East
+    int     floor_color;
+    int     ceiling_color;
 
     t_player player;
 }	t_game;

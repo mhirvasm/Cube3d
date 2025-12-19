@@ -163,10 +163,10 @@ void draw_wall(t_game *game, int x, t_ray *ray)
 //
     // draw vertical line (floor, wall, ceiling)
     //drawing ceiling here
+    color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
     y = 0;
     while (y < draw_start)
     {
-		color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
         my_mlx_pixel_put(game, x, y, color);
         y++;
     }
@@ -185,11 +185,13 @@ void draw_wall(t_game *game, int x, t_ray *ray)
 			mlx_xpm_file_to_image(game, game->map.textures[SOUTH], &x, &y);
         y++;
     }
+    color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
     y = draw_end;
     while (y < HEIGHT)
     {
-		color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
         my_mlx_pixel_put(game, x, y, color);
         y++;
     }
+
+    
 }
