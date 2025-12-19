@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:05:51 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/18 17:39:43 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:45:38 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	int		color;
 	int		i;
 	int		j;
+	int		r;
+	int		g;
+	int		b;
 
 	i = 0;
 	color = -1;
@@ -89,12 +92,10 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 		}
 		i++;
 	}
-	if (ft_atoi(rgb[0]) == 1)
-		return(-1);
-	if (ft_atoi(rgb[1]) == 1)
-		return (-1);
-	if (ft_atoi(rgb[2]) == 1)
-	return (-1);
+	r = ft_atoi(rgb[0]);
+	g = ft_atoi(rgb[1]);
+	b = ft_atoi(rgb[2]); // validate 0-255 
+	printf("%d %d %d\n", r, g, b);
 	color = encode_rgb(ft_atoi(rgb[0]), ft_atoi(rgb[1]), ft_atoi(rgb[2]));
 	ft_free(rgb);
 	return (color);

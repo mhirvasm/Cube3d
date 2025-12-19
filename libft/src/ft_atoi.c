@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 10:23:35 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/18 09:55:24 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:46:42 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_atoi(const char *nptr)
 		nptr++;
 	}
 	if (*nptr != '\0')
-		return (1);
+		return (-1);
 	if (minus_sign != 0)
 		result = -result;
 	return (result);

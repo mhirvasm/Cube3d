@@ -173,7 +173,7 @@ void draw_wall(t_game *game, int x, t_ray *ray)
 
     // this is only drawing a wall for now
     y = draw_start;
-    while (y < draw_end)
+    while (y < draw_end) //TODO This is wrong, mlx_xpm_file_to_image is just returning a pointer. 
     {
 		if (ray->direction.x < 0 && ray->step.x == -1) //-1 for left
 			mlx_xpm_file_to_image(game, game->map.textures[WEST], &x, &y);

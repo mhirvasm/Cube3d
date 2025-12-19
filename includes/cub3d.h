@@ -11,8 +11,8 @@
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
-# define WIDTH 1920
-# define HEIGHT 1280
+# define WIDTH 1024
+# define HEIGHT 720
 # define BLOCK 64
 # define DEBUG 0
 
@@ -97,21 +97,38 @@ typedef struct s_player
     bool		right_rotate;
 }   t_player;
 
+typedef struct s_img
+{
+
+    void	*img;
+    char	*data;
+    int		bpp;
+    int		size_line;
+    int		endian;
+    int     width;
+    int     height;
+
+} t_img;
+
 typedef struct s_game
 {
 	t_map	map;
 
 	void	*mlx;
     void	*win;
-    void	*img;
+    void    *img;
 
     char	*data;
     int		bpp;
     int		size_line;
     int		endian;
 
+    t_img   walls[4]; //0=North, 1=South, 2=West, 3=East
+
     t_player player;
 }	t_game;
+
+
 
 /* ************************************************************************** */
 /* INITIALIZATION                                                             */
