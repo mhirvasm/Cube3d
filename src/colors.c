@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:05:51 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/19 09:46:47 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/19 14:44:03 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	get_colors(t_game *game, char **colors, int fd)
 				l = 0;
 				while (colors[i][j])
 					line[l++] = colors[i][j++];
-				line[l] = '\0';
+				line[l - 1] = '\0';
 				free(colors[i]);
 				colors[i] = ft_strdup(line);
 				free(line);
