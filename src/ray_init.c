@@ -121,20 +121,7 @@ void	perform_dda(t_game *game, t_ray *ray)
 		if (game->map.grid[ray->map.y][ray->map.x] == '1')
 			hit = 1;
 	}
-	if (ray->side == 0)
-	{
-		if (game->player.dir.x == 1)
-			game->map.color = EAST;
-		else
-			game->map.color = WEST;
-	}
-	else
-	{
-		if (game->player.dir.y == 1)
-			game->map.color = NORTH;
-		else
-			game->map.color = SOUTH;
-	}
+
 }
 
 //in the end of dda, we are "one step too far", so we want to fix the distance values by goin one step back
@@ -158,6 +145,24 @@ void calculate_wall_dist(t_ray *ray)
     ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
     if (ray->draw_end >= HEIGHT)
         ray->draw_end = HEIGHT - 1;
+}
+
+static int  get_texture_index(t_ray *ray)
+{
+    if (ray->side == 0) // Hit x axis
+    {
+        if (ray->direction.x < 0)
+            return (WEST); // WEST
+        else
+            return (EAST); // EAST
+    }
+    else // Hit y axis
+    {
+        if (ray->direction.y < 0)
+            return (NORTH); // NORTH
+        else
+            return (SOUTH); // SOUTH
+    }
 }
 
 void draw_walls(t_game *game, int x, t_ray *ray)

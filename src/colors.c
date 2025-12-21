@@ -79,7 +79,7 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	i = 0;
 	color = -1;
 	rgb = ft_split(texture, ' ');
-	printf("%s", rgb[0]);
+	printf(" rgb0 %s rgb1 %s rgb2 %s\n", rgb[0], rgb[1], rgb[2]);
 	if (!rgb)
 		error_and_exit("Error. ft_split failure", game);
 	while (rgb[i])
@@ -93,9 +93,12 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 		}
 		i++;
 	}
+	printf(" rgb0 %s rgb1 %s rgb2 %s\n", rgb[0], rgb[1], rgb[2]);
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
-	b = ft_atoi(rgb[2]); // validate 0-255 
+	b = ft_atoi(rgb[2]); // validate 0-255
+	printf("REAL NUMBAS |%d| |%d| |%d|\n", r, g ,b);
+
 	if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255))
 		printf("u faggot\n"); //THIS IS VALIDATION, MAKE ERROR AND EXIT 
 	color = encode_rgb(ft_atoi(rgb[0]), ft_atoi(rgb[1]), ft_atoi(rgb[2]));
