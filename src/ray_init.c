@@ -165,10 +165,41 @@ static int  get_texture_index(t_ray *ray)
     }
 }
 
+
 void draw_walls(t_game *game, int x, t_ray *ray)
 {
-    int y;
+    int     tex_num;
+    double  wall_x; 
+    int     tex_x;
+    double  step;
+    double  tex_pos;
+    int     y;
+    int     tex_y;
+    int     color;
+    
+    tex_num = get_texture_index(ray);
 
+    // calculate wall x
+    if (ray->side == 0)
+        wall_x = game->player.pos.y + ray->wall_dist * ray->direction.y;
+    else
+        wall_x = game->player.pos.x + ray->wall_dist * ray->direction.x;
+    
+    wall_x -= floor(wall_x); //transform into dexcimal
+
+    // -calculate tex x, which "column" we choose
+    tex_x = (int)(wall_x * (double)game->walls[tex_num].width);
+
+
+    
+    // how much do we move in texture per pixel (scaling)
+    step = 1.0 * game->walls[tex_num].height / ray->line_height;
+
+    // calculate start pos
+    tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * step;
+
+
+    //draw ceiling
     y = 0;
     while (y < ray->draw_start)
     {
@@ -176,14 +207,29 @@ void draw_walls(t_game *game, int x, t_ray *ray)
         y++;
     }
 
-    // this is only drawing a wall for now
-//	y = ray->draw_start;
-//	while (y < ray->draw_end)
-	y = ray->draw_end;
-	while (y < HEIGHT)
-	{
-		my_mlx_pixel_put(game, x, y, game->floor_color);
-		y++;
-	}
-//	walls(game, x, ray);
+    // draw wall
+    y = ray->draw_start;
+    while (y < ray->draw_end)
+    {
+        tex_y = (int)tex_pos & (game->walls[tex_num].height - 1);
+        
+        tex_pos += step; // next position in text
+        
+        char *pixel = game->walls[tex_num].addr + 
+                      (tex_y * game->walls[tex_num].size_line + 
+                       tex_x * (game->walls[tex_num].bpp / 8));
+        
+        color = *(unsigned int *)pixel;
+
+        my_mlx_pixel_put(game, x, y, color);
+        y++;
+    }
+
+    ///draw floor
+    y = ray->draw_end;
+    while (y < HEIGHT)
+    {
+        my_mlx_pixel_put(game, x, y, game->floor_color);
+        y++;
+    }
 }
