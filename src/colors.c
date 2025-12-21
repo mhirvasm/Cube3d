@@ -79,6 +79,7 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	i = 0;
 	color = -1;
 	rgb = ft_split(texture, ' ');
+	printf("%s", rgb[0]);
 	if (!rgb)
 		error_and_exit("Error. ft_split failure", game);
 	while (rgb[i])
@@ -96,7 +97,7 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	g = ft_atoi(rgb[1]);
 	b = ft_atoi(rgb[2]); // validate 0-255 
 	if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255))
-		printf("u faggot\n");
+		printf("u faggot\n"); //THIS IS VALIDATION, MAKE ERROR AND EXIT 
 	color = encode_rgb(ft_atoi(rgb[0]), ft_atoi(rgb[1]), ft_atoi(rgb[2]));
 	ft_free(rgb);
 	return (color);

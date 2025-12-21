@@ -5,6 +5,7 @@ void raycast(t_game *game)
 	t_ray	ray;
 
 	ft_bzero(&ray, sizeof(t_ray));
+
     int x = 0;
 
     while (x < WIDTH) 
@@ -161,15 +162,12 @@ void calculate_wall_dist(t_ray *ray)
 
 void draw_walls(t_game *game, int x, t_ray *ray)
 {
-    int color;
     int y;
 
-
-    color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
     y = 0;
     while (y < ray->draw_start)
     {
-        my_mlx_pixel_put(game, x, y, color);
+        my_mlx_pixel_put(game, x, y, game->ceiling_color);
         y++;
     }
 
@@ -177,10 +175,9 @@ void draw_walls(t_game *game, int x, t_ray *ray)
 //	y = ray->draw_start;
 //	while (y < ray->draw_end)
 	y = ray->draw_end;
-	color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
 	while (y < HEIGHT)
 	{
-		my_mlx_pixel_put(game, x, y, color);
+		my_mlx_pixel_put(game, x, y, game->floor_color);
 		y++;
 	}
 //	walls(game, x, ray);
