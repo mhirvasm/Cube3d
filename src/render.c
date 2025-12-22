@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 09:48:20 by mhirvasm          #+#    #+#             */
+/*   Updated: 2025/12/22 09:51:38 by mhirvasm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
@@ -28,7 +40,7 @@ void	draw_square(t_game *game, int x, int y, int size, int color)
 	}
 }
 
-static void draw_line(t_game *game, t_vector start, t_vector end, int color)
+static void	draw_line(t_game *game, t_vector start, t_vector end, int color)
 {
 	double	delta_x;
 	double	delta_y;
@@ -54,22 +66,19 @@ static void draw_line(t_game *game, t_vector start, t_vector end, int color)
 	}
 }
 
-static void draw_player_dir(t_game *game, int tile_size)
+static void	draw_player_dir(t_game *game, int tile_size)
 {
 	t_vector	start;
 	t_vector	end;
 
-
 	start.x = game->player.pos.x * tile_size;
 	start.y = game->player.pos.y * tile_size;
-
 	end.x = start.x + (game->player.dir.x * 30);
 	end.y = start.y + (game->player.dir.y * 30);
-
 	draw_line(game, start, end, 0xFFFF00);
 }
 
-void draw_player(t_game *game, int tile_size)
+void	draw_player(t_game *game, int tile_size)
 {
     int px = (int)(game->player.pos.x * tile_size);
     int py = (int)(game->player.pos.y * tile_size);
