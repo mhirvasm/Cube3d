@@ -49,7 +49,11 @@ static void init_textures(t_game *game)
                           &game->walls[i].bpp,
                           &game->walls[i].size_line,
                           &game->walls[i].endian);
+	i++;
 	}
+	game->floor_color = parse_and_validate_rgb(game, game->map.textures[FLOOR]); 
+    game->ceiling_color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
+	// DEBUGGGING printf("%d %d\n", game->floor_color, game->ceiling_color);
 
 }*/
 

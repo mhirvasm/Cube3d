@@ -5,6 +5,7 @@ void raycast(t_game *game)
 	t_ray	ray;
 
 	ft_bzero(&ray, sizeof(t_ray));
+
     int x = 0;
 
     while (x < WIDTH) 
@@ -120,20 +121,7 @@ void	perform_dda(t_game *game, t_ray *ray)
 		if (game->map.grid[ray->map.y][ray->map.x] == '1')
 			hit = 1;
 	}
-	if (ray->side == 0)
-	{
-		if (game->player.dir.x == 1)
-			game->map.color = EAST;
-		else
-			game->map.color = WEST;
-	}
-	else
-	{
-		if (game->player.dir.y == 1)
-			game->map.color = NORTH;
-		else
-			game->map.color = SOUTH;
-	}
+
 }
 
 //in the end of dda, we are "one step too far", so we want to fix the distance values by goin one step back
@@ -159,29 +147,89 @@ void calculate_wall_dist(t_ray *ray)
         ray->draw_end = HEIGHT - 1;
 }
 
+static int  get_texture_index(t_ray *ray)
+{
+    if (ray->side == 0) // Hit x axis
+    {
+        if (ray->direction.x < 0)
+            return (WEST); // WEST
+        else
+            return (EAST); // EAST
+    }
+    else // Hit y axis
+    {
+        if (ray->direction.y < 0)
+            return (NORTH); // NORTH
+        else
+            return (SOUTH); // SOUTH
+    }
+}
+
+
 void draw_walls(t_game *game, int x, t_ray *ray)
 {
-    int color;
-    int y;
+    int     tex_num;
+    double  wall_x; 
+    int     tex_x;
+    double  step;
+    double  tex_pos;
+    int     y;
+    int     tex_y;
+    int     color;
+    
+    tex_num = get_texture_index(ray);
+
+    // calculate wall x
+    if (ray->side == 0)
+        wall_x = game->player.pos.y + ray->wall_dist * ray->direction.y;
+    else
+        wall_x = game->player.pos.x + ray->wall_dist * ray->direction.x;
+    
+    wall_x -= floor(wall_x); //transform into dexcimal
+
+    // -calculate tex x, which "column" we choose
+    tex_x = (int)(wall_x * (double)game->walls[tex_num].width);
 
 
-    color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
+    
+    // how much do we move in texture per pixel (scaling)
+    step = 1.0 * game->walls[tex_num].height / ray->line_height;
+
+    // calculate start pos
+    tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * step;
+
+
+    //draw ceiling
     y = 0;
     while (y < ray->draw_start)
     {
+        my_mlx_pixel_put(game, x, y, game->ceiling_color);
+        y++;
+    }
+
+    // draw wall
+    y = ray->draw_start;
+    while (y < ray->draw_end)
+    {
+        tex_y = (int)tex_pos & (game->walls[tex_num].height - 1);
+        
+        tex_pos += step; // next position in text
+        
+        char *pixel = game->walls[tex_num].addr + 
+                      (tex_y * game->walls[tex_num].size_line + 
+                       tex_x * (game->walls[tex_num].bpp / 8));
+        
+        color = *(unsigned int *)pixel;
+
         my_mlx_pixel_put(game, x, y, color);
         y++;
     }
 
-    // this is only drawing a wall for now
-//	y = ray->draw_start;
-//	while (y < ray->draw_end)
-	y = ray->draw_end;
-	color = parse_and_validate_rgb(game, game->map.textures[FLOOR]);
-	while (y < HEIGHT)
-	{
-		my_mlx_pixel_put(game, x, y, color);
-		y++;
-	}
-//	walls(game, x, ray);
+    ///draw floor
+    y = ray->draw_end;
+    while (y < HEIGHT)
+    {
+        my_mlx_pixel_put(game, x, y, game->floor_color);
+        y++;
+    }
 }

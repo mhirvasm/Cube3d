@@ -11,9 +11,9 @@
 # include "libft.h"
 # include "get_next_line/get_next_line.h"
 
-# define WIDTH 1024
-# define HEIGHT 720
-# define BLOCK 64
+# define WIDTH 1920
+# define HEIGHT 1080
+# define BLOCK 128
 # define DEBUG 0
 
 # define WHITE 0xFFFFFF
@@ -29,8 +29,8 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.1
-# define ROTSPEED 0.05
+# define MOVESPEED 0.07
+# define ROTSPEED 0.04
 
 # define NORTH 0
 # define SOUTH 1
