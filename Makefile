@@ -3,7 +3,7 @@ NAME    = cub3d
 
 # Compiler and flags
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -g -Wno-incompatible-pointer-types
+CFLAGS  = -Wall -Wextra -Werror -g
 
 #Includes
 INCLUDES	= includes
