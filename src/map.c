@@ -1,18 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 12:15:10 by vahdekiv          #+#    #+#             */
+/*   Updated: 2025/12/22 15:36:52 by vahdekiv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "cub3d.h"
-
-//strlen is -1 because we don't want the newline
 
 void	create_map(t_game *game, char *map_file)
 {
 	t_map	*map_ptr;
 	int		fd;
 
-	map_ptr = &game->map; //Changing from mallocing, to use game struct straight away!
-
+	map_ptr = &game->map;
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file1", game); //here we take game for cleanup
+		error_and_exit("Error. Invalid file1", game);
 	if (gettextures(game, fd))
 		error_and_exit("Error. Invalid file2.0", game);
 	getmapsize(map_ptr, fd);
@@ -34,11 +42,10 @@ void	create_map(t_game *game, char *map_file)
 void	create_grid(t_game *game, int fd)
 {
 	t_map	*map;
-	int		current_len; // new variable 
 
 	map = &game->map;
 	map->y = 0;
-	map->width = 0; // initialize 
+	map->width = 0;
 	while (1)
 	{
 		map->line = get_next_line(fd);
@@ -54,28 +61,7 @@ void	create_grid(t_game *game, int fd)
 			break ;
 		free(map->line);
 	}
-	while (map->y < map->height)
-	{
-		if (map->y != 0)
-			map->line = get_next_line(fd);
-		current_len = ft_strlen(map->line);
-		if (map->line[current_len - 1] == '\n')
-			current_len--; // substract the newline from len
-		if (current_len > map->width)
-			map->width = current_len;
-		map->grid[map->y] = ft_strdup(map->line);
-		if (!map->grid[map->y])
-		{
-			close(fd);
-			error_and_exit("Error. Strdup failure", game);
-		}
-		map->grid[map->y][(int)ft_strlen(map->grid[map->y]) - 1] = '\0';
-		free(map->line);
-		map->line = NULL;
-		map->y++;
-	}
-	map->grid[map->y] = NULL;
-	close(fd);
+	grid(game, map, fd);
 }
 
 void	validate_path(t_game *game)
@@ -85,6 +71,8 @@ void	validate_path(t_game *game)
 	int		x;
 	int		y;
 
+	y = 0;
+	x = 0;
 	map = &game->map;
 	copy = malloc(1 * sizeof(t_map));
 	if (!copy)
@@ -100,47 +88,13 @@ void	validate_path(t_game *game)
 		free(copy);
 		error_and_exit("Error. Memory allocation failed", game);
 	}
-	y = 0;
-	while (y < map->height)
-	{
-		copy->grid[y] = ft_strdup(map->grid[y]);
-		if (!copy->grid[y])
-		{
-			free_map(copy);
-			free(copy);
-			error_and_exit("Error. Strdup failure", game);
-		}
-		y++;
-	}
-	copy->grid[y] = NULL;
-	flood_fill(copy, map->playerx, map->playery);
-	y = 0;
-	while (y < map->height)
-	{
-		x = 0;
-		while (copy->grid[y][x])
-		{
-			if (copy->grid[y][x] == 'F')
-			{
-				if (x == 0 || y == 0 || y == map->height - 1 
-					|| copy->grid[y][x + 1] == '\0' || copy->grid[y][x + 1] == ' ')
-				{
-					free_map(copy);
-					free(copy);
-					error_and_exit("Error. Map is not enclosed", game);
-				}
-			}
-			x++;
-		}
-		y++;
-	}
-	free_map(copy);
-	free(copy);
+	grid_copy(game, copy);
+	validate_copy(game, copy, x, y);
 }
 
 void	validate_grid(t_game *game)
 {
-	t_map *map;
+	t_map	*map;
 
 	map = &game->map;
 	map->y = 0;

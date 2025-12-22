@@ -1,9 +1,9 @@
- NO ./path_to_texture                                                             
-SO ./path_to_texture                                                             
-EA ./path_to_texture                                                             
-WE ./path_to_texture                                                             
+ NO ./cactus64.xpm                                                             
+SO ./cactus64.xpm                                                            
+EA ./cactus64.xpm                                                            
+WE ./cactus64.xpm                                                           
 F 200, 50, 20                                                
-C ./path_to_texture
+C 0, 100, 20
  
         1111111111111111111111111
         1000000000110000000000001
