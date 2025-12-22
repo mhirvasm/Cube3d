@@ -8,28 +8,18 @@ void	free_map(t_map *map)
 	if (map->grid)
     {
         while (map->grid[++i])
-        {
             free(map->grid[i]);
-            map->grid[i] = NULL; // countering double frees
-        }
         free(map->grid);
-        map->grid = NULL;
     }
 	i = -1;
 	if (map->textures)
 	{
 		while (map->textures[++i])
-		{
 			free(map->textures[i]);
-			map->textures[i] = NULL;
-		}
+		free(map->textures);
 	}
-    if (map->line)
-    {
-        free(map->line);
-        map->line = NULL;
-    }
-	//dont free the map	here, its part of game
+	if (map->line)
+		free(map->line);
 }
 
 void	error_and_exit(char *msg, t_game *game)

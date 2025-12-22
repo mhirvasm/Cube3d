@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 09:09:04 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/18 09:10:02 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/22 11:42:42 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,40 @@ static void	init_graphics(t_game *game)
 		error_and_exit("Error. Image data fetch failed", game);
 }
 
+static void init_textures(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	
+	while (i < 4) // NORTH EAST SOUTH WEST = 4 
+	{
+    game->walls[i].img = mlx_xpm_file_to_image(game->mlx, 
+                         game->map.textures[i],
+                         &game->walls[i].width, 
+                         &game->walls[i].height);
+
+    if (!game->walls[i].img)
+        error_and_exit("Error. Texture load failed", game);
+
+    game->walls[i].addr = mlx_get_data_addr(game->walls[i].img,
+                          &game->walls[i].bpp,
+                          &game->walls[i].size_line,
+                          &game->walls[i].endian);
+	i++;
+	}
+	game->floor_color = parse_and_validate_rgb(game, game->map.textures[FLOOR]); 
+    game->ceiling_color = parse_and_validate_rgb(game, game->map.textures[CEILING]);
+	// DEBUGGGING printf("%d %d\n", game->floor_color, game->ceiling_color);
+
+}
+
 int	init_game(t_game *game, char *map_file)
 {
 	create_map(game, map_file);
 	init_player_vectors(&game->player, &game->map);
 	init_graphics(game);
+	init_textures(game);
 	return (0);
 }
 

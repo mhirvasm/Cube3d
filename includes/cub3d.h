@@ -12,8 +12,8 @@
 # include "get_next_line/get_next_line.h"
 
 # define WIDTH 1920
-# define HEIGHT 1280
-# define BLOCK 64
+# define HEIGHT 1080
+# define BLOCK 128
 # define DEBUG 0
 
 # define WHITE 0xFFFFFF
@@ -29,8 +29,8 @@
 # define KEY_ESC 65307
 
 # define PI 3.14159265359
-# define MOVESPEED 0.1
-# define ROTSPEED 0.05
+# define MOVESPEED 0.07
+# define ROTSPEED 0.04
 
 # define NORTH 0
 # define SOUTH 1
@@ -66,6 +66,9 @@ typedef struct s_ray
     t_point     step;       // direction (1 or -1)
     double      wall_dist;  // final distance
     int         side;       // (flag) 0 = vertical wall, 1 for horizontal
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
 } t_ray;
 
 typedef struct s_map
@@ -81,8 +84,9 @@ typedef struct s_map
 	char		player_dir;
 	int			spawncount;
 	char		**textures;
-    int         floor_color;
-    int         ceiling_color;
+
+	int			color;
+
 }	t_map;
 
 typedef struct s_player
@@ -99,21 +103,40 @@ typedef struct s_player
     bool		right_rotate;
 }   t_player;
 
+typedef struct s_img
+{
+
+    void	*img;
+    char	*addr;
+    int		bpp;
+    int		size_line;
+    int		endian;
+    int     width;
+    int     height;
+
+} t_img;
+
 typedef struct s_game
 {
-	t_map	map;
+	  t_map	map;
 
-	void	*mlx;
+	  void	*mlx;
     void	*win;
-    void	*img;
+    void    *img;
 
     char	*data;
     int		bpp;
     int		size_line;
     int		endian;
 
+    t_img   walls[4]; //0=North, 1=South, 2=West, 3=East
+    int     floor_color;
+    int     ceiling_color;
+
     t_player player;
 }	t_game;
+
+
 
 /* ************************************************************************** */
 /* INITIALIZATION                                                             */
@@ -128,6 +151,8 @@ int     check_extension(char *argv);
 int		gettextures(t_game *game, int fd);
 void	get_colors(t_game *game, char **colors, int fd);
 int		line_check(char *line, char c, char d);
+int		parse_and_validate_rgb(t_game *game, char *texture);
+int		encode_rgb(int r, int g, int b);
 void    create_map(t_game *game, char *map_file);
 void    create_grid(t_game *game, int fd);
 void    getmapsize(t_map *map, int fd);
@@ -154,7 +179,7 @@ void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 void    init_ray(t_ray *ray, t_player *player, int x);
 void	perform_dda(t_game *game, t_ray *ray);
 void    calculate_wall_dist(t_ray *ray);
-void    draw_wall(t_game *game, int x, t_ray *ray);
+void    draw_walls(t_game *game, int x, t_ray *ray);
 void    raycast(t_game *game);
 
 /* ************************************************************************** */
