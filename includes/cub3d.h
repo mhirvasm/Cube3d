@@ -181,6 +181,7 @@ void	perform_dda(t_game *game, t_ray *ray);
 void    calculate_wall_dist(t_ray *ray);
 void    draw_walls(t_game *game, int x, t_ray *ray);
 void    raycast(t_game *game);
+void	draw_minimap(t_game *game);
 
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */

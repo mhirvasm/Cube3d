@@ -147,12 +147,49 @@ static void	draw_minimap_square(t_game *game, int x, int y, int color)
 	}
 }
 
-static void	draw_minimap(t_game *game)
+static void	draw_minimap_player(t_game *game)
+{
+	int	center_x;
+	int	center_y;
+	int	i;
+	int	j;
+
+	center_x = MM_OFFSET_X + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
+	center_y = MM_OFFSET_Y + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
+	i = -2;
+	while (i < 2)
+	{
+		j = -2;
+		while (j < 2)
+		{
+			my_mlx_pixel_put(game, center_x + j, center_y + i, RED);
+			j++;
+		}
+		i++;
+	}
+}
+
+static int	get_minimap_color(t_game *game, int map_x, int map_y)
+{
+	if (map_y < 0 || map_y >= game->map.height || map_x < 0
+		|| map_x >= (int)ft_strlen(game->map.grid[map_y]))
+		return (0x222222);
+	
+	if (game->map.grid[map_y][map_x] == '1')
+		return (WHITE);
+
+	if (game->map.grid[map_y][map_x] != ' ')
+		return (BLACK);
+	return (0x222222);
+}
+
+void	draw_minimap(t_game *game)
 {
 	int	y;
 	int	x;
 	int	map_y;
 	int	map_x;
+	int	color;
 
 	y = -MM_VIEW_DIST;
 	while (y <= MM_VIEW_DIST)
@@ -162,36 +199,14 @@ static void	draw_minimap(t_game *game)
 		{
 			map_y = (int)game->player.pos.y + y;
 			map_x = (int)game->player.pos.x + x;
-			if (map_y >= 0 && map_y < game->map.height && map_x >= 0
-				&& map_x < (int)ft_strlen(game->map.grid[map_y]))
-			{
-				if (game->map.grid[map_y][map_x] == '1')
-					draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0xFFFFFF);
-				else if (game->map.grid[map_y][map_x] != ' ')
-					draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x000000);
-				else
-					draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x222222);
-			}
+			color = get_minimap_color(game, map_x, map_y);
+			draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST,
+				color);
 			x++;
 		}
 		y++;
 	}
-	//TODOBreak this into another function? 
-    int center_x = MM_OFFSET_X + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
-    int center_y = MM_OFFSET_Y + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
-    
-	//Here we draw the little player rectangle
- 	int i = 0;
-    while (i < 4)
-    {
-        int j = 0;
-        while (j < 4)
-        {
-            my_mlx_pixel_put(game, center_x + j, center_y + i, RED);
-            j++;
-        }
-        i++;
-    }
+	draw_minimap_player(game);
 }
 
 static int	get_tile_size(t_game *game)
