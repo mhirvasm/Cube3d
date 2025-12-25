@@ -196,12 +196,13 @@ static void	draw_minimap(t_game *game)
 
 void	draw_2d_map(t_game *game)
 {
-	int	tile_size;
+	int	tile_size; // tilesize into a struck?
 	int	scale_w;
 	int	scale_h;
 	int	y;
 	int x;
 
+	//initialize tile and scale
 	scale_w = WIDTH / game->map.width;
 	scale_h = HEIGHT / game->map.height;
 	if (scale_w < scale_h)

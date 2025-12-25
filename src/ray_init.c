@@ -28,17 +28,9 @@ void	raycast(t_game *game)
 		x++;
 	}
 }
-
-void	init_ray(t_ray *ray, t_player *player, int x)
+static void get_delta_dist(t_ray *ray)
 {
-	double	camera_x;
-
-	camera_x = 2 * x / (double)WIDTH - 1;
-	ray->direction.x = player->dir.x + (player->plane.x * camera_x);
-	ray->direction.y = player->dir.y + (player->plane.y * camera_x);
-	ray->map.x = (int)player->pos.x;
-	ray->map.y = (int)player->pos.y;
-	if (ray->direction.x == 0)
+    if (ray->direction.x == 0)
 		ray->delta_dist.x = 1e30;
 	else
 		ray->delta_dist.x = fabs(1.0 / ray->direction.x);
@@ -46,7 +38,11 @@ void	init_ray(t_ray *ray, t_player *player, int x)
 		ray->delta_dist.y = 1e30;
 	else
 		ray->delta_dist.y = fabs(1.0 / ray->direction.y);
-	if (ray->direction.x < 0)
+}
+
+static void get_side_dist(t_ray *ray, t_player *player)
+{
+    if (ray->direction.x < 0)
 	{
 		ray->step.x = -1;
 		ray->side_dist.x = (player->pos.x - ray->map.x) * ray->delta_dist.x;
@@ -68,6 +64,18 @@ void	init_ray(t_ray *ray, t_player *player, int x)
 		ray->side_dist.y = (ray->map.y + 1.0 - player->pos.y)
 			* ray->delta_dist.y;
 	}
+}
+void	init_ray(t_ray *ray, t_player *player, int x)
+{
+	double	camera_x;
+
+	camera_x = 2 * x / (double)WIDTH - 1;
+	ray->direction.x = player->dir.x + (player->plane.x * camera_x);
+	ray->direction.y = player->dir.y + (player->plane.y * camera_x);
+	ray->map.x = (int)player->pos.x;
+	ray->map.y = (int)player->pos.y;
+	get_delta_dist(ray);
+    get_side_dist(ray, player);
 }
 
 void	perform_dda(t_game *game, t_ray *ray)
