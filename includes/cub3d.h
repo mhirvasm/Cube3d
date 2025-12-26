@@ -44,6 +44,15 @@
 # define MM_OFFSET_Y 20     // distance from up
 # define MM_VIEW_DIST 10    // how many tiles can be seen
 
+typedef struct s_wall_vars
+{
+	int		tex_num;
+	int		tex_x;
+	int		tex_y;
+	double	step;
+	double	tex_pos;
+	double	wall_x;
+}	t_wall_vars;
 
 typedef struct s_vector
 {
