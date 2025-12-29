@@ -14,7 +14,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define BLOCK 128
-# define DEBUG 0
+# define DEBUG 1
 
 # define WHITE 0xFFFFFF
 # define BLACK 0x000000
@@ -93,6 +93,7 @@ typedef struct s_map
 	char		player_dir;
 	int			spawncount;
 	char		**textures;
+    int         tile_size;
 
 	int			color;
 
@@ -182,7 +183,7 @@ void    flood_fill(t_map *copy, int x, int y);
 int     render_frame(t_game *game);
 void    draw_2d_map(t_game *game);
 void    draw_player(t_game *game, int tile_size);
-void	draw_square(t_game *game, int x, int y, int size, int color);
+void	draw_square(t_game *game, int x, int y, int color);
 void	clear_image(t_game *game);
 void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 void    init_ray(t_ray *ray, t_player *player, int x);

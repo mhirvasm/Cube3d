@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 09:48:20 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/22 10:31:46 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/29 11:58:26 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	draw_square(t_game *game, int x, int y, int size, int color)
+void	draw_square(t_game *game, int x, int y, int color)
 {
 	int	i;
 	int	j;
+	int	size;
 
+	size = game->map.tile_size;
 	i = 0;
 	while (i < size - 1)
 	{
@@ -232,7 +234,8 @@ void	draw_2d_map(t_game *game)
 	int x;
 	int	tile_size;
 
-	tile_size = get_tile_size(game);
+	game->map.tile_size = get_tile_size(game);
+	tile_size = game->map.tile_size;
 	y = 0;
 	while (game->map.grid[y])
 	{
@@ -240,9 +243,9 @@ void	draw_2d_map(t_game *game)
 		while (game->map.grid[y][x])
 		{
 			if (game->map.grid[y][x] == '1')
-				draw_square(game, x, y, tile_size, WHITE);
+				draw_square(game, x, y, WHITE);
 			else if (game->map.grid[y][x] != ' ')
-				draw_square(game, x, y, tile_size, BLACK);
+				draw_square(game, x, y, BLACK);
 			x++;
 		}
 		y++;
