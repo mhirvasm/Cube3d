@@ -6,7 +6,7 @@
 /*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:15:10 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/22 15:36:52 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/29 16:26:48 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ void	create_map(t_game *game, char *map_file)
 	map_ptr = &game->map;
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file1", game);
+		error_and_exit("Error opening file", game);
 	if (gettextures(game, fd))
-		error_and_exit("Error. Invalid file2.0", game);
+		error_and_exit("Error. Invalid texture", game);
 	getmapsize(map_ptr, fd);
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
-		error_and_exit("Error. Invalid file3", game);
+		error_and_exit("Error opening file", game);
 	map_ptr->grid = malloc((map_ptr->height + 1) * sizeof(char *));
 	if (!map_ptr->grid)
 	{
@@ -41,27 +41,27 @@ void	create_map(t_game *game, char *map_file)
 
 void	create_grid(t_game *game, int fd)
 {
-	t_map	*map;
+	t_map	*m;
 
-	map = &game->map;
-	map->y = 0;
-	map->width = 0;
+	m = &game->map;
+	m->y = 0;
+	m->width = 0;
 	while (1)
 	{
-		map->line = get_next_line(fd);
-		if (!line_check(map->line, 'C', ' '))
+		m->line = get_next_line(fd);
+		if (!line_check(m->line, 'C', ' '))
 			break ;
-		free(map->line);
+		free(m->line);
 	}
-	free(map->line);
+	free(m->line);
 	while (1)
 	{
-		map->line = get_next_line(fd);
-		if (line_check(map->line, '1', '1'))
+		m->line = get_next_line(fd);
+		if (!line_check(m->line, '1', '1') || !line_check(m->line, '1', ' '))
 			break ;
-		free(map->line);
+		free(m->line);
 	}
-	grid(game, map, fd);
+	grid(game, m, fd);
 }
 
 void	validate_path(t_game *game)

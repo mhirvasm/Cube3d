@@ -6,7 +6,7 @@
 /*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:04:41 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/22 14:50:27 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/29 16:18:55 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,7 @@ int	line_check(char *line, char c, char d)
 	while (line[i] == ' ' || line[i] == '\t' || line[i] == '\f'
 		|| line[i] == '\v' || line[i] == '\r')
 		i++;
-	if (line[i] == '\n')
-		return (0);
-	if (line[i] == '1')
-		return (1);
-	if (line[i] == c && line[i + 1] == d)
+	if ((line[i] == c && line[i + 1] == d) || c == '\n')
 		return (0);
 	return (1);
 }
