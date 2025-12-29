@@ -14,7 +14,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define BLOCK 128
-# define DEBUG 1
+# define DEBUG 0
 
 # define WHITE 0xFFFFFF
 # define BLACK 0x000000

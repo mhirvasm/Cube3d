@@ -50,14 +50,20 @@ void	create_grid(t_game *game, int fd)
 	while (1)
 	{
 		map->line = get_next_line(fd);
-		if (line_check(map->line, '1', '1'))
+		if (!line_check(map->line, '1', '1') || !line_check(map->line, '1', ' '))
+		{
+			printf(" found 1: %s and break\n", map->line);
 			break ;
+		}
 		free(map->line);
 	}
 	while (map->y < map->height)
 	{
+
+		printf("map y = %d\n", map->height);
 		if (map->y != 0)
 			map->line = get_next_line(fd);
+		//printf("%s\n", map->line);
 		current_len = ft_strlen(map->line);
 		if (map->line[current_len - 1] == '\n')
 			current_len--; // substract the newline from len
