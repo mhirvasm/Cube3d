@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 NO ./skyline128.xpm
 SO ./skyline128.xpm
 EA ./skyline128.xpm
 WE ./skyline128.xpm
 F 14, 5, 6
 C 14, 5, 6
+=======
+ NO ./cactus64.xpm                                                             
+SO ./cactus64.xpm                                                            
+EA ./cactus64.xpm                                                            
+WE ./cactus64.xpm                                                           
+F 200, 50, 20                                                
+C 0, 100, 20
+>>>>>>> origin/dev
  
         1111111111111111111111111
         1000000000110000000000001

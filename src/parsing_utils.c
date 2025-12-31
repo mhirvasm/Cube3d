@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 12:04:41 by vahdekiv          #+#    #+#             */
+/*   Updated: 2025/12/31 12:29:35 by mhirvasm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "cub3d.h"
 
@@ -7,22 +18,20 @@ int	check_extension(char *arg)
 
 	len = ft_strlen(arg);
 	if (!(arg[len - 1] == 'b' && arg[len - 2] == 'u' && arg[len - 3] == 'c'
-		&& arg[len - 4] == '.'))
+			&& arg[len - 4] == '.'))
 		return (1);
 	return (0);
 }
 
-int	line_check(char *line, char	c, char d)
+int	line_check(char *line, char c, char d)
 {
 	int	i;
 
 	i = 0;
 	while (line[i] == ' ' || line[i] == '\t' || line[i] == '\f'
-			|| line[i] == '\v' || line[i] == '\r')
-			i++;
-//	if (line[i] == '1')
-//		return (1);
-	if ((line[i] == c && line[i + 1] == d) ||  c == '\n')
+		|| line[i] == '\v' || line[i] == '\r')
+		i++;
+	if ((line[i] == c && line[i + 1] == d) || c == '\n')
 		return (0);
 	return (1);
 }
@@ -48,11 +57,10 @@ static int	texture_strdup(t_map *map, char *line)
 	return (0);
 }
 
-static void	texture_truncate(t_game *game, char **textures, int fd)
+void	texture_truncate(t_game *game, char **textures, int fd)
 {
 	int		i;
 	int		j;
-	int		l;
 	char	*line;
 
 	i = -1;
@@ -69,13 +77,7 @@ static void	texture_truncate(t_game *game, char **textures, int fd)
 					close(fd);
 					error_and_exit("Error. Malloc failure.", game);
 				}
-				l = 0;
-				while (textures[i][j])
-					line[l++] = textures[i][j++];
-				line[l - 1] = '\0';
-				free(textures[i]);
-				textures[i] = ft_strdup(line);
-				free(line);
+				texture_helper(textures, i, j, line);
 				break ;
 			}
 			j++;
@@ -107,16 +109,7 @@ int	gettextures(t_game *game, int fd)
 	}
 	if (line)
 		free(line);
-	line = NULL;
-	game->map.textures[6] = NULL;
-	if (!(game->map.textures[NORTH] && game->map.textures[SOUTH]
-		&& game->map.textures[EAST] && game->map.textures[WEST]
-		&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
-	{
-		printf("gotcha\n");
+	if (texture_validate(game, fd))
 		return (1);
-	}
-	texture_truncate(game, game->map.textures, fd);
-	get_colors(game, game->map.textures, fd);
 	return (0);
 }

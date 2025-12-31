@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 11:58:22 by vahdekiv          #+#    #+#             */
+/*   Updated: 2025/12/31 12:28:26 by mhirvasm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "cub3d.h"
 
@@ -8,7 +19,8 @@ void	getmapsize(t_map *map, int fd)
 	while (1)
 	{
 		map->line = get_next_line(fd);
-		if (!line_check(map->line, '1', '1') || !line_check(map->line, '1', ' '))
+		if (!line_check(map->line, '1', '1')
+			|| !line_check(map->line, '1', ' '))
 			break ;
 		free(map->line);
 	}
@@ -27,13 +39,11 @@ void	getmapsize(t_map *map, int fd)
 
 void	wall_helper(t_game *game)
 {
-	t_map *map;
+	t_map	*map;
 
 	map = &game->map;
-	//printf("%c, x%d, y%d\n", map->grid[map->x][map->y], map->x, map->y);
 	while (map->grid[map->y][map->x] == ' ')
 	{
-		printf("%c, x%d, y%d\n", map->grid[map->y][map->x], map->x, map->y);
 		if (map->y == 0 && (map->grid[map->y + 1][map->x] != ' '
 			&& map->grid[map->y + 1][map->x] != '1'))
 			error_and_exit("Error. Map not enclosed1", game);
@@ -42,20 +52,17 @@ void	wall_helper(t_game *game)
 			error_and_exit("Error. Map not enclosed2", game);
 		if (map->y != 0 && map->y != map->height - 1
 			&& ((map->grid[map->y - 1][map->x] != ' '
-			&& map->grid[map->y - 1][map->x] != '1')
+				&& map->grid[map->y - 1][map->x] != '1')
 			|| (map->grid[map->y + 1][map->x] != ' '
 			&& map->grid[map->y + 1][map->x] != '1')))
-			{
-				printf("%c, x%d, y%d\n", map->grid[map->y][map->x], map->x, map->y);
 			error_and_exit("Error. Map not enclosed2.1", game);
-			}
 		map->x++;
 	}
 }
 
 void	validate_elements(t_game *game)
 {
-	t_map *map;
+	t_map	*map;
 
 	map = &game->map;
 	if ((map->y == 0 || map->y == map->height - 1)
@@ -70,8 +77,9 @@ void	validate_elements(t_game *game)
 		&& map->grid[map->y][map->x] != 'S')
 		error_and_exit("Error. Invalid elements1", game);
 	if ((map->x == 0 && map->grid[map->y][map->x] != ' '
-		&& map->grid[map->y][map->x] != '1') 
-		|| ((map->x != 0 && map->grid[map->y][map->x - 1] &&  map->grid[map->y][map->x - 1] == ' '
+		&& map->grid[map->y][map->x] != '1')
+		|| ((map->x != 0 && map->grid[map->y][map->x - 1]
+		&& map->grid[map->y][map->x - 1] == ' '
 		&& (map->grid[map->y][map->x] != ' '
 		&& map->grid[map->y][map->x] != '1'))
 		|| map->grid[map->y][ft_strlen(map->grid[map->y]) - 1] != '1'))
@@ -80,7 +88,7 @@ void	validate_elements(t_game *game)
 
 void	count_elements(t_game *game)
 {
-	t_map *map;
+	t_map	*map;
 
 	map = &game->map;
 	map->spawncount = 0;
@@ -108,6 +116,10 @@ void	count_elements(t_game *game)
 
 void	flood_fill(t_map *copy, int x, int y)
 {
+	if (y < 0 || y >= copy->height)
+		return ;
+	if (x < 0 || x >= (int)ft_strlen(copy->grid[y]))
+		return ;
 	if (copy->grid[y][x] == 'F' || copy->grid[y][x] == '1')
 		return ;
 	copy->grid[y][x] = 'F';
