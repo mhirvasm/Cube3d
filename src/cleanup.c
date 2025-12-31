@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 12:09:16 by vahdekiv          #+#    #+#             */
+/*   Updated: 2025/12/22 12:11:59 by vahdekiv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	free_map(t_map *map)
@@ -6,11 +18,11 @@ void	free_map(t_map *map)
 
 	i = -1;
 	if (map->grid)
-    {
-        while (map->grid[++i])
-            free(map->grid[i]);
-        free(map->grid);
-    }
+	{
+		while (map->grid[++i])
+			free(map->grid[i]);
+		free(map->grid);
+	}
 	i = -1;
 	if (map->textures)
 	{
@@ -26,8 +38,8 @@ void	error_and_exit(char *msg, t_game *game)
 {
 	printf("%s\n", msg);
 	if (game)
-    {
-		free_map(&game->map); //free map
+	{
+		free_map(&game->map);
 		if (game->img)
 			mlx_destroy_image(game->mlx, game->img);
 		if (game->win)
@@ -37,7 +49,7 @@ void	error_and_exit(char *msg, t_game *game)
 			mlx_destroy_display(game->mlx);
 			free(game->mlx);
 		}
-    }
+	}
 	exit(1);
 }
 

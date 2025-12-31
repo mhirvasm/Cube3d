@@ -149,12 +149,17 @@ void    init_player_vectors(t_player *player, t_map *map);
 /* ************************************************************************** */
 int     check_extension(char *argv);
 int		gettextures(t_game *game, int fd);
+void	texture_helper(char **textures, int i, int j, char *line);
+int		texture_validate(t_game *game, int fd);
+void	texture_truncate(t_game *game, char **textures, int fd);
 void	get_colors(t_game *game, char **colors, int fd);
 int		line_check(char *line, char c, char d);
 int		parse_and_validate_rgb(t_game *game, char *texture);
+int		rgb_helper(t_game *game, char **rgb);
 int		encode_rgb(int r, int g, int b);
 void    create_map(t_game *game, char *map_file);
 void    create_grid(t_game *game, int fd);
+void	grid(t_game *game, t_map *map, int fd);
 void    getmapsize(t_map *map, int fd);
 
 /* ************************************************************************** */
@@ -163,7 +168,10 @@ void    getmapsize(t_map *map, int fd);
 void    validate_grid(t_game *game);
 void    validate_path(t_game *game);
 void    wall_helper(t_game *game);
+void	wall_validation(t_game *game, int x, int y);
 void    validate_elements(t_game *game);
+void	grid_copy(t_game *game, t_map *copy);
+void    validate_copy(t_game *game, t_map *copy, int x, int y);
 void    count_elements(t_game *game);
 void    flood_fill(t_map *copy, int x, int y);
 
@@ -187,13 +195,17 @@ void    raycast(t_game *game);
 /* ************************************************************************** */
 int     key_press(int keycode, t_game *game);
 int		key_release(int keycode, t_game *game);
+int		is_wall(t_game *game, int x, int y);
 void	move_player(t_game *game);
 void	rotate_player(t_game *game, double rot_speed);
+void	move_up_and_down(t_game *game);
+void	move_right_and_left(t_game *game);
 
 /* ************************************************************************** */
 /* CLEANUP & ERROR HANDLING                                                   */
 /* ************************************************************************** */
 void    free_map(t_map *map);
+void	ft_free(char **array);
 void    error_and_exit(char *msg, t_game *game);
 void    error(char *msg);
 
