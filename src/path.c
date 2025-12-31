@@ -6,7 +6,7 @@
 /*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:07:42 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/22 15:33:55 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/31 12:17:11 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,21 @@ void	grid_copy(t_game *game, t_map *copy)
 	flood_fill(copy, map->playerx, map->playery);
 }
 
+static int	copy_check(t_map *map, t_map *copy, int x, int y)
+{
+	if ((x == 0 || y == 0 || y == map->height - 1)
+		|| ((copy->grid[y][x + 1] != '1'
+			&& copy->grid[y][x + 1] != 'F')
+		|| (copy->grid[y][x - 1] != '1'
+		&& copy->grid[y][x - 1] != 'F')
+		|| (copy->grid[y + 1][x] != '1'
+		&& copy->grid[y + 1][x] != 'F')
+		|| (copy->grid[y - 1][x] != '1'
+		&& copy->grid[y - 1][x] != 'F')))
+		return (1);
+	return (0);
+}
+
 void	validate_copy(t_game *game, t_map *copy, int x, int y)
 {
 	t_map	*map;
@@ -46,9 +61,7 @@ void	validate_copy(t_game *game, t_map *copy, int x, int y)
 		{
 			if (copy->grid[y][x] == 'F')
 			{
-				if (x == 0 || y == 0 || y == map->height - 1
-					|| copy->grid[y][x + 1] == '\0'
-					|| copy->grid[y][x + 1] == ' ')
+				if (copy_check(map, copy, x, y))
 				{
 					free_map(copy);
 					free(copy);
