@@ -153,6 +153,7 @@ typedef struct s_game
 /* ************************************************************************** */
 int     init_game(t_game *game, char *map_file);
 void    init_player_vectors(t_player *player, t_map *map);
+void	textures_init(t_game *game, int fd);
 
 /* ************************************************************************** */
 /* MAP PARSING & READING                                                      */

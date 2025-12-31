@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:04:41 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/31 12:29:35 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/31 13:55:34 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ static int	texture_strdup(t_map *map, char *line)
 {
 	if (!line_check(line, 'N', 'O'))
 		map->textures[NORTH] = ft_strdup(line);
-	if (!line_check(line, 'S', 'O'))
+	else if (!line_check(line, 'S', 'O'))
 		map->textures[SOUTH] = ft_strdup(line);
-	if (!line_check(line, 'E', 'A'))
+	else if (!line_check(line, 'E', 'A'))
 		map->textures[EAST] = ft_strdup(line);
-	if (!line_check(line, 'W', 'E'))
+	else if (!line_check(line, 'W', 'E'))
 		map->textures[WEST] = ft_strdup(line);
-	if (!line_check(line, 'F', ' '))
+	else if (!line_check(line, 'F', ' '))
 		map->textures[FLOOR] = ft_strdup(line);
-	if (!line_check(line, 'C', ' '))
+	else if (!line_check(line, 'C', ' '))
 		map->textures[CEILING] = ft_strdup(line);
 	else if (!line_check(line, '\n', '\0'))
 		return (0);
@@ -89,12 +89,7 @@ int	gettextures(t_game *game, int fd)
 {
 	char	*line;
 
-	game->map.textures = malloc(7 * sizeof(char *));
-	if (!game->map.textures)
-	{
-		close(fd);
-		error_and_exit("Error. Malloc failure.", game);
-	}
+	textures_init(game, fd);
 	while (1)
 	{
 		line = get_next_line(fd);

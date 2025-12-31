@@ -6,7 +6,7 @@
 /*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:09:16 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/22 12:11:59 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/31 14:24:25 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ void	free_map(t_map *map)
 			free(map->grid[i]);
 		free(map->grid);
 	}
-	i = -1;
 	if (map->textures)
 	{
-		while (map->textures[++i])
-			free(map->textures[i]);
+		free(map->textures[NORTH]);
+		free(map->textures[SOUTH]);
+		free(map->textures[WEST]);
+		free(map->textures[EAST]);
+		free(map->textures[FLOOR]);
+		free(map->textures[CEILING]);
 		free(map->textures);
 	}
 	if (map->line)

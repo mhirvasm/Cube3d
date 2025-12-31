@@ -6,7 +6,7 @@
 /*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:43:37 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/29 15:16:34 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/31 14:20:26 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,8 @@ void	texture_helper(char **textures, int i, int j, char *line)
 int	texture_validate(t_game *game, int fd)
 {
 	game->map.textures[6] = NULL;
-	if (!(game->map.textures[NORTH] && game->map.textures[SOUTH]
-			&& game->map.textures[EAST] && game->map.textures[WEST]
-			&& game->map.textures[FLOOR] && game->map.textures[CEILING]))
+	if (!game->map.textures[NORTH] || !game->map.textures[SOUTH]
+		|| !game->map.textures[EAST] || !game->map.textures[WEST])
 	{
 		close(fd);
 		return (1);
