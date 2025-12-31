@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 09:48:20 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/22 10:31:46 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2025/12/29 11:58:26 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	draw_square(t_game *game, int x, int y, int size, int color)
+void	draw_square(t_game *game, int x, int y, int color)
 {
 	int	i;
 	int	j;
+	int	size;
 
+	size = game->map.tile_size;
 	i = 0;
 	while (i < size - 1)
 	{
@@ -147,12 +149,49 @@ static void	draw_minimap_square(t_game *game, int x, int y, int color)
 	}
 }
 
-static void	draw_minimap(t_game *game)
+static void	draw_minimap_player(t_game *game)
+{
+	int	center_x;
+	int	center_y;
+	int	i;
+	int	j;
+
+	center_x = MM_OFFSET_X + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
+	center_y = MM_OFFSET_Y + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
+	i = -2;
+	while (i < 2)
+	{
+		j = -2;
+		while (j < 2)
+		{
+			my_mlx_pixel_put(game, center_x + j, center_y + i, RED);
+			j++;
+		}
+		i++;
+	}
+}
+
+static int	get_minimap_color(t_game *game, int map_x, int map_y)
+{
+	if (map_y < 0 || map_y >= game->map.height || map_x < 0
+		|| map_x >= (int)ft_strlen(game->map.grid[map_y]))
+		return (0x222222);
+	
+	if (game->map.grid[map_y][map_x] == '1')
+		return (WHITE);
+
+	if (game->map.grid[map_y][map_x] != ' ')
+		return (BLACK);
+	return (0x222222);
+}
+
+void	draw_minimap(t_game *game)
 {
 	int	y;
 	int	x;
 	int	map_y;
 	int	map_x;
+	int	color;
 
 	y = -MM_VIEW_DIST;
 	while (y <= MM_VIEW_DIST)
@@ -162,56 +201,41 @@ static void	draw_minimap(t_game *game)
 		{
 			map_y = (int)game->player.pos.y + y;
 			map_x = (int)game->player.pos.x + x;
-			if (map_y >= 0 && map_y < game->map.height && map_x >= 0
-				&& map_x < (int)ft_strlen(game->map.grid[map_y]))
-			{
-				if (game->map.grid[map_y][map_x] == '1')
-					draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0xFFFFFF);
-				else if (game->map.grid[map_y][map_x] != ' ')
-					draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x000000);
-				else
-					draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST, 0x222222);
-			}
+			color = get_minimap_color(game, map_x, map_y);
+			draw_minimap_square(game, x + MM_VIEW_DIST, y + MM_VIEW_DIST,
+				color);
 			x++;
 		}
 		y++;
 	}
-	//TODOBreak this into another function? 
-    int center_x = MM_OFFSET_X + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
-    int center_y = MM_OFFSET_Y + (MM_VIEW_DIST * MM_TILE) + (MM_TILE / 2);
-    
-	//Here we draw the little player rectangle
- 	int i = 0;
-    while (i < 4)
-    {
-        int j = 0;
-        while (j < 4)
-        {
-            my_mlx_pixel_put(game, center_x + j, center_y + i, RED);
-            j++;
-        }
-        i++;
-    }
+	draw_minimap_player(game);
 }
 
-void	draw_2d_map(t_game *game)
+static int	get_tile_size(t_game *game)
 {
-	int	tile_size;
 	int	scale_w;
 	int	scale_h;
-	int	y;
-	int x;
+	int	tile_size;
 
 	scale_w = WIDTH / game->map.width;
 	scale_h = HEIGHT / game->map.height;
 	if (scale_w < scale_h)
 		tile_size = scale_w;
 	else
-	{
 		tile_size = scale_h;
-	}
 	if (tile_size < 1)
 		tile_size = 1;
+	return (tile_size);
+}
+
+void	draw_2d_map(t_game *game)
+{
+	int	y;
+	int x;
+	int	tile_size;
+
+	game->map.tile_size = get_tile_size(game);
+	tile_size = game->map.tile_size;
 	y = 0;
 	while (game->map.grid[y])
 	{
@@ -219,9 +243,9 @@ void	draw_2d_map(t_game *game)
 		while (game->map.grid[y][x])
 		{
 			if (game->map.grid[y][x] == '1')
-				draw_square(game, x, y, tile_size, WHITE);
+				draw_square(game, x, y, WHITE);
 			else if (game->map.grid[y][x] != ' ')
-				draw_square(game, x, y, tile_size, BLACK);
+				draw_square(game, x, y, BLACK);
 			x++;
 		}
 		y++;

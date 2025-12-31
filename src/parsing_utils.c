@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:04:41 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/29 16:18:55 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/31 12:29:35 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ static int	texture_strdup(t_map *map, char *line)
 {
 	if (!line_check(line, 'N', 'O'))
 		map->textures[NORTH] = ft_strdup(line);
-	else if (!line_check(line, 'S', 'O'))
+	if (!line_check(line, 'S', 'O'))
 		map->textures[SOUTH] = ft_strdup(line);
-	else if (!line_check(line, 'E', 'A'))
+	if (!line_check(line, 'E', 'A'))
 		map->textures[EAST] = ft_strdup(line);
-	else if (!line_check(line, 'W', 'E'))
+	if (!line_check(line, 'W', 'E'))
 		map->textures[WEST] = ft_strdup(line);
-	else if (!line_check(line, 'F', ' '))
+	if (!line_check(line, 'F', ' '))
 		map->textures[FLOOR] = ft_strdup(line);
-	else if (!line_check(line, 'C', ' '))
+	if (!line_check(line, 'C', ' '))
 		map->textures[CEILING] = ft_strdup(line);
 	else if (!line_check(line, '\n', '\0'))
 		return (0);

@@ -44,6 +44,15 @@
 # define MM_OFFSET_Y 20     // distance from up
 # define MM_VIEW_DIST 10    // how many tiles can be seen
 
+typedef struct s_wall_vars
+{
+	int		tex_num;
+	int		tex_x;
+	int		tex_y;
+	double	step;
+	double	tex_pos;
+	double	wall_x;
+}	t_wall_vars;
 
 typedef struct s_vector
 {
@@ -84,6 +93,7 @@ typedef struct s_map
 	char		player_dir;
 	int			spawncount;
 	char		**textures;
+    int         tile_size;
 
 	int			color;
 
@@ -181,7 +191,7 @@ void    flood_fill(t_map *copy, int x, int y);
 int     render_frame(t_game *game);
 void    draw_2d_map(t_game *game);
 void    draw_player(t_game *game, int tile_size);
-void	draw_square(t_game *game, int x, int y, int size, int color);
+void	draw_square(t_game *game, int x, int y, int color);
 void	clear_image(t_game *game);
 void    my_mlx_pixel_put(t_game *game, int x, int y, int color);
 void    init_ray(t_ray *ray, t_player *player, int x);
@@ -189,6 +199,7 @@ void	perform_dda(t_game *game, t_ray *ray);
 void    calculate_wall_dist(t_ray *ray);
 void    draw_walls(t_game *game, int x, t_ray *ray);
 void    raycast(t_game *game);
+void	draw_minimap(t_game *game);
 
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */

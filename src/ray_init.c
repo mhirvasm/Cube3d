@@ -1,87 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_init.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 12:09:51 by mhirvasm          #+#    #+#             */
+/*   Updated: 2025/12/22 12:33:09 by mhirvasm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-void raycast(t_game *game)
+void	raycast(t_game *game)
 {
 	t_ray	ray;
+	int		x;
 
 	ft_bzero(&ray, sizeof(t_ray));
-
-    int x = 0;
-
-    while (x < WIDTH) 
-    {
-        //init ray for this position x 
-        init_ray(&ray, &game->player, x);
-        
-        //calculate whhere the ray hits
-        perform_dda(game, &ray);
-		//fix values before draw
+	x = 0;
+	while (x < WIDTH)
+	{
+		init_ray(&ray, &game->player, x);
+		perform_dda(game, &ray);
 		calculate_wall_dist(&ray);
-        //draw
 		draw_walls(game, x, &ray);
-        x++; //move to next vertical line
-    }
+		x++;
+	}
+}
+static void get_delta_dist(t_ray *ray)
+{
+    if (ray->direction.x == 0)
+		ray->delta_dist.x = 1e30;
+	else
+		ray->delta_dist.x = fabs(1.0 / ray->direction.x);
+	if (ray->direction.y == 0)
+		ray->delta_dist.y = 1e30;
+	else
+		ray->delta_dist.y = fabs(1.0 / ray->direction.y);
 }
 
-// We need the ray starting position (its x,y position)
-// Remember that we first need to find a spot from horizontal or vertical linepoint
-// Init ray calculates this starting point, where we send the ray 
-
-//In a nutshell we need 3 things: 
-								// direction of the ray
-								// Starting position of the ray
-								// Start distance for the first vertical or horizontal line of the grid
-
-void init_ray(t_ray *ray, t_player *player, int x)
+static void get_side_dist(t_ray *ray, t_player *player)
 {
-    double camera_x;
-
-    camera_x = 2 * x / (double)WIDTH - 1;
-
-	//ray direction init
-    ray->direction.x = player->dir.x + (player->plane.x * camera_x);
-    ray->direction.y = player->dir.y + (player->plane.y * camera_x);
-
-	//ray start pos init
-    ray->map.x = (int)player->pos.x;
-    ray->map.y = (int)player->pos.y;
-
-    //length of one step
-    if (ray->direction.x == 0)
-        ray->delta_dist.x = 1e30; // ("infinity")
-    else
-        ray->delta_dist.x = fabs(1.0 / ray->direction.x);
-
-    if (ray->direction.y == 0)
-        ray->delta_dist.y = 1e30;
-    else
-        ray->delta_dist.y = fabs(1.0 / ray->direction.y);
-
-    //calculating  step for  the first "grid line"
-
-    // x axis
     if (ray->direction.x < 0)
-    {
-        ray->step.x = -1; //-1 for left
-        ray->side_dist.x = (player->pos.x - ray->map.x) * ray->delta_dist.x;
-    }
-    else
-    {
-        ray->step.x = 1; //1 for rright
-        ray->side_dist.x = (ray->map.x + 1.0 - player->pos.x) * ray->delta_dist.x;
-    }
+	{
+		ray->step.x = -1;
+		ray->side_dist.x = (player->pos.x - ray->map.x) * ray->delta_dist.x;
+	}
+	else
+	{
+		ray->step.x = 1;
+		ray->side_dist.x = (ray->map.x + 1.0 - player->pos.x)
+			* ray->delta_dist.x;
+	}
+	if (ray->direction.y < 0)
+	{
+		ray->step.y = -1;
+		ray->side_dist.y = (player->pos.y - ray->map.y) * ray->delta_dist.y;
+	}
+	else
+	{
+		ray->step.y = 1;
+		ray->side_dist.y = (ray->map.y + 1.0 - player->pos.y)
+			* ray->delta_dist.y;
+	}
+}
+void	init_ray(t_ray *ray, t_player *player, int x)
+{
+	double	camera_x;
 
-    // y axis
-    if (ray->direction.y < 0)
-    {
-        ray->step.y = -1; //-1 for up
-        ray->side_dist.y = (player->pos.y - ray->map.y) * ray->delta_dist.y;
-    }
-    else
-    {
-        ray->step.y = 1; //1 for down
-        ray->side_dist.y = (ray->map.y + 1.0 - player->pos.y) * ray->delta_dist.y;
-    }
+	camera_x = 2 * x / (double)WIDTH - 1;
+	ray->direction.x = player->dir.x + (player->plane.x * camera_x);
+	ray->direction.y = player->dir.y + (player->plane.y * camera_x);
+	ray->map.x = (int)player->pos.x;
+	ray->map.y = (int)player->pos.y;
+	get_delta_dist(ray);
+    get_side_dist(ray, player);
 }
 
 void	perform_dda(t_game *game, t_ray *ray)
@@ -89,147 +83,108 @@ void	perform_dda(t_game *game, t_ray *ray)
 	int	hit;
 
 	hit = 0;
-
 	while (!!!hit)
 	{
-		//check which one wins, x or y axis
 		if (ray->side_dist.x < ray->side_dist.y)
 		{
-			//x axis won
-
-			// increase side_dist_x by adding delta_dist_x into it
 			ray->side_dist.x += ray->delta_dist.x;
-            
-            // move map coordinate with step we intialized in init
-            ray->map.x += ray->step.x;
-            // mark that we hit "vertical wall"
+			ray->map.x += ray->step.x;
 			ray->side = 0;
 		}
-		//else sidedisty < sidesistx
 		else
 		{
-			//y axis won
-
-			// increase side_dist_y by adding delta_dist_y into it
 			ray->side_dist.y += ray->delta_dist.y;
-            
-            // move map coordinate with step we intialized in init
-            ray->map.y += ray->step.y;
-            // mark that we hit "horizontal walll"
+			ray->map.y += ray->step.y;
 			ray->side = 1;
 		}
 		if (game->map.grid[ray->map.y][ray->map.x] == '1')
 			hit = 1;
 	}
-
 }
 
-//in the end of dda, we are "one step too far", so we want to fix the distance values by goin one step back
-void calculate_wall_dist(t_ray *ray)
+void	calculate_wall_dist(t_ray *ray)
 {
-    
-    if (ray->side == 0)
-        ray->wall_dist = (ray->side_dist.x - ray->delta_dist.x);
-    else
-        ray->wall_dist = (ray->side_dist.y - ray->delta_dist.y);
-    //calculate the height of the wall, the smaller the number, more far the wall is located
-    ray->line_height = (int)(HEIGHT / ray->wall_dist);
-
-    // calculate the start of the draw, and end of the draw
-    ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
-
-	//if we are very close to the wall and the value would turnout to be minus value, we initialize the value to 0 coz we cant draw to -1 indexes
-    if (ray->draw_start < 0)
-        ray->draw_start = 0;
-
-    ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
-    if (ray->draw_end >= HEIGHT)
-        ray->draw_end = HEIGHT - 1;
+	if (ray->side == 0)
+		ray->wall_dist = (ray->side_dist.x - ray->delta_dist.x);
+	else
+		ray->wall_dist = (ray->side_dist.y - ray->delta_dist.y);
+	ray->line_height = (int)(HEIGHT / ray->wall_dist);
+	ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
+	if (ray->draw_end >= HEIGHT)
+		ray->draw_end = HEIGHT - 1;
 }
 
-static int  get_texture_index(t_ray *ray)
+static int	get_texture_index(t_ray *ray)
 {
-    if (ray->side == 0) // Hit x axis
-    {
-        if (ray->direction.x < 0)
-            return (WEST); // WEST
-        else
-            return (EAST); // EAST
-    }
-    else // Hit y axis
-    {
-        if (ray->direction.y < 0)
-            return (NORTH); // NORTH
-        else
-            return (SOUTH); // SOUTH
-    }
+	if (ray->side == 0)
+	{
+		if (ray->direction.x < 0)
+			return (WEST);
+		else
+			return (EAST);
+	}
+	else
+	{
+		if (ray->direction.y < 0)
+			return (NORTH);
+		else
+			return (SOUTH);
+	}
 }
 
-
-void draw_walls(t_game *game, int x, t_ray *ray)
+static void	init_wall_vars(t_game *game, t_ray *ray, t_wall_vars *v)
 {
-    int     tex_num;
-    double  wall_x; 
-    int     tex_x;
-    double  step;
-    double  tex_pos;
-    int     y;
-    int     tex_y;
-    int     color;
-    
-    tex_num = get_texture_index(ray);
+	v->tex_num = get_texture_index(ray);
+	if (ray->side == 0)
+		v->wall_x = game->player.pos.y + ray->wall_dist * ray->direction.y;
+	else
+		v->wall_x = game->player.pos.x + ray->wall_dist * ray->direction.x;
+	v->wall_x -= floor(v->wall_x);
+	v->tex_x = (int)(v->wall_x * (double)game->walls[v->tex_num].width);
+	if ((ray->side == 0 && ray->direction.x > 0)
+		|| (ray->side == 1 && ray->direction.y < 0))
+		v->tex_x = game->walls[v->tex_num].width - v->tex_x - 1;
+	v->step = 1.0 * game->walls[v->tex_num].height / ray->line_height;
+	v->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2)
+		* v->step;
+}
 
-    // calculate wall x
-    if (ray->side == 0)
-        wall_x = game->player.pos.y + ray->wall_dist * ray->direction.y;
-    else
-        wall_x = game->player.pos.x + ray->wall_dist * ray->direction.x;
-    
-    wall_x -= floor(wall_x); //transform into dexcimal
+static void	draw_stripe(t_game *game, int x, t_ray *ray, t_wall_vars *v)
+{
+	int		y;
+	int		color;
+	char	*src;
 
-    // -calculate tex x, which "column" we choose
-    tex_x = (int)(wall_x * (double)game->walls[tex_num].width);
+	y = 0;
+	while (y < ray->draw_start)
+	{
+		my_mlx_pixel_put(game, x, y, game->ceiling_color);
+		y++;
+	}
+	while (y < ray->draw_end)
+	{
+		v->tex_y = (int)v->tex_pos & (game->walls[v->tex_num].height - 1);
+		v->tex_pos += v->step;
+		src = game->walls[v->tex_num].addr + (v->tex_y
+				* game->walls[v->tex_num].size_line + v->tex_x
+				* (game->walls[v->tex_num].bpp / 8));
+		color = *(unsigned int *)src;
+		my_mlx_pixel_put(game, x, y, color);
+		y++;
+	}
+	while (y < HEIGHT)
+	{
+		my_mlx_pixel_put(game, x, y++, game->floor_color);
+	}
+}
 
+void	draw_walls(t_game *game, int x, t_ray *ray)
+{
+    t_wall_vars	vars;
 
-    
-    // how much do we move in texture per pixel (scaling)
-    step = 1.0 * game->walls[tex_num].height / ray->line_height;
-
-    // calculate start pos
-    tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * step;
-
-
-    //draw ceiling
-    y = 0;
-    while (y < ray->draw_start)
-    {
-        my_mlx_pixel_put(game, x, y, game->ceiling_color);
-        y++;
-    }
-
-    // draw wall
-    y = ray->draw_start;
-    while (y < ray->draw_end)
-    {
-        tex_y = (int)tex_pos & (game->walls[tex_num].height - 1);
-        
-        tex_pos += step; // next position in text
-        
-        char *pixel = game->walls[tex_num].addr + 
-                      (tex_y * game->walls[tex_num].size_line + 
-                       tex_x * (game->walls[tex_num].bpp / 8));
-        
-        color = *(unsigned int *)pixel;
-
-        my_mlx_pixel_put(game, x, y, color);
-        y++;
-    }
-
-    ///draw floor
-    y = ray->draw_end;
-    while (y < HEIGHT)
-    {
-        my_mlx_pixel_put(game, x, y, game->floor_color);
-        y++;
-    }
+	init_wall_vars(game, ray, &vars);
+	draw_stripe(game, x, ray, &vars);
 }
