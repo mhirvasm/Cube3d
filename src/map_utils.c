@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 11:58:22 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/29 16:27:56 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2025/12/31 10:56:47 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,11 @@ void	count_elements(t_game *game)
 
 void	flood_fill(t_map *copy, int x, int y)
 {
+	if (y < 0 || y >= copy->height)
+		return ;
+	if (x < 0 || x >= (int)ft_strlen(copy->grid[y]))
+		return ;
+	
 	if (copy->grid[y][x] == 'F' || copy->grid[y][x] == '1')
 		return ;
 	copy->grid[y][x] = 'F';
