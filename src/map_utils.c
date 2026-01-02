@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 11:58:22 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/31 12:28:26 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2026/01/02 09:11:23 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,8 @@
 
 void	getmapsize(t_map *map, int fd)
 {
-	map->height = 0;
+	map->height = 1;
 	map->line = NULL;
-	while (1)
-	{
-		map->line = get_next_line(fd);
-		if (!line_check(map->line, '1', '1')
-			|| !line_check(map->line, '1', ' '))
-			break ;
-		free(map->line);
-	}
-	map->height++;
-	free(map->line);
 	while (1)
 	{
 		map->line = get_next_line(fd);

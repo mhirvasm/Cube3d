@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:04:41 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/31 13:55:34 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2026/01/02 09:14:31 by vahdekiv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,28 @@ void	texture_truncate(t_game *game, char **textures, int fd)
 
 int	gettextures(t_game *game, int fd)
 {
-	char	*line;
-
 	textures_init(game, fd);
 	while (1)
 	{
-		line = get_next_line(fd);
-		if (texture_strdup(&game->map, line))
+		game->line = get_next_line(fd);
+		if (!game->line)
 		{
-			free(line);
+			close(fd);
 			return (1);
 		}
-		if (!line_check(line, 'C', ' '))
+		if (texture_strdup(&game->map, game->line))
+		{
+			free(game->line);
+			close(fd);
+			return (1);
+		}
+		if (!line_check(game->line, '1', ' ')
+			|| !line_check(game->line, '1', '1'))
 			break ;
-		free(line);
+		free(game->line);
 	}
-	if (line)
-		free(line);
+	if (game->line)
+		free(game->line);
 	if (texture_validate(game, fd))
 		return (1);
 	return (0);
