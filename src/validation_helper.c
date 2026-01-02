@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   validation_helper.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:43:37 by vahdekiv          #+#    #+#             */
 /*   Updated: 2026/01/02 09:20:23 by vahdekiv         ###   ########.fr       */
@@ -96,6 +96,9 @@ int	rgb_helper(t_game *game, char **rgb)
 	int	b;
 	int	color;
 
+	r = -1;
+	g = -1;
+	b = -1;
 	color = -1;
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
