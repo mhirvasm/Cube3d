@@ -130,11 +130,12 @@ typedef struct s_game
 {
 	  t_map	map;
 
-	  void	*mlx;
+	void	*mlx;
     void	*win;
     void    *img;
 
     char	*data;
+	char	*line;
     int		bpp;
     int		size_line;
     int		endian;
