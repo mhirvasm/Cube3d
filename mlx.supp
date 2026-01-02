@@ -1,0 +1,27 @@
+{
+   mlx_xpm_image_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_xpm_file_to_image
+   ...
+}
+
+{
+   mlx_internal_image_alloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_int_new_xshm_image
+   ...
+}
+
+{
+   x11_shm_image_alloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XShmCreateImage
+   ...
+}
+

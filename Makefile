@@ -31,7 +31,7 @@ $(NAME): $(OBJ) $(LIBFT) $(MLX_LIB)
 	$(CC) $(CFLAGS) $(OBJ) $(IFLAGS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 # Compile
-%.o: %.c
+%.o: %.c | $(MLX_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(IFLAGS) -I$(MLX_DIR) -c $< -o $@
 
@@ -40,9 +40,13 @@ $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
 # Build MLX so that lib exists (won't rebuild unless needed)
-mlx: $(MLX_LIB)
-$(MLX_LIB):
+$(MLX_DIR):
+	git clone https://github.com/42Paris/minilibx-linux $(MLX_DIR)
+$(MLX_LIB): $(MLX_DIR)
 	@make -C $(MLX_DIR)
+
+clean_mlx:
+	@if [ -d "$(MLX_DIR)" ]; then make -C $(MLX_DIR) clean; fi
 
 # Clean object files
 clean:
@@ -53,6 +57,7 @@ clean:
 # Clean everything we own; MLX usually doesn’t have fclean, so call clean
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
+	rm -rf $(MLX_DIR)
 	rm -f $(NAME)
 
 # Rebuild
@@ -61,7 +66,5 @@ re:
 	@make all
 
 # Helper to clean MLX without failing if rule is missing
-clean_mlx:
-	@make -C $(MLX_DIR) clean
 
 .PHONY: all clean fclean re
