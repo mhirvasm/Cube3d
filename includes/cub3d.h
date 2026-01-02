@@ -141,6 +141,7 @@ typedef struct s_game
     int		endian;
 
     t_img   walls[4]; //0=North, 1=South, 2=West, 3=East
+	int		color;
     int     floor_color;
     int     ceiling_color;
 
