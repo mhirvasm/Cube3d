@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vahdekiv <vahdekiv@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 13:48:57 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/31 13:57:33 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2026/01/02 09:18:41 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,14 @@ void	textures_init(t_game *game, int fd)
 	game->map.textures[EAST] = NULL;
 	game->map.textures[FLOOR] = NULL;
 	game->map.textures[CEILING] = NULL;
+}
+
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
+{
+	char	*dst;
+
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+		return ;
+	dst = game->data + (y * game->size_line + x * (game->bpp / 8));
+	*(unsigned int *)dst = color;
 }
