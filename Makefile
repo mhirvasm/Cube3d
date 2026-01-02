@@ -1,50 +1,70 @@
 # Executable name
-NAME    = cube3d
+NAME    = cub3d
 
 # Compiler and flags
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror
+CFLAGS  = -Wall -Wextra -Werror -g
 
 #Includes
-INCS        := -I include -I libft
-LIBS        := -Llibft -lft
+INCLUDES	= includes
+IFLAGS		= -I$(INCLUDES) -I$(LIBFT_DIR)
+LIBS        = -Llibft -lft
 
 # Files
-SRC     = 
+SRC     = src/main.c src/map.c src/map_utils.c src/parsing_utils.c src/utils.c src/cleanup.c src/init.c src/render.c src/input.c src/input_utils.c src/colors.c src/ray_init.c src/validation_helper.c src/path.c src/walls.c src/raycast.c src/draw.c src/minimap.c
 OBJ     = $(SRC:.c=.o)
 
 # Libft
 LIBFT_DIR   := libft
 LIBFT       := $(LIBFT_DIR)/libft.a
 
+#Minilibx
+MLX_DIR     := minilibx-linux
+MLX_LIB     := $(MLX_DIR)/libmlx_Linux.a
+MLX_FLAGS   := -L$(MLX_DIR) -lmlx_Linux -L/usr/lib -I$(MLX_DIR) -lXext -lX11 -lm -lz
+
 # Default
 all: $(NAME)
 
-# Link
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(INCS) $(LIBS) -o $@
+# Main binary
+$(NAME): $(OBJ) $(LIBFT) $(MLX_LIB)
+	$(CC) $(CFLAGS) $(OBJ) $(IFLAGS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 # Compile
-%.o: %.c
+%.o: %.c | $(MLX_DIR)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+	$(CC) $(CFLAGS) $(IFLAGS) -I$(MLX_DIR) -c $< -o $@
 
+# Build libft via its own Makefile (won't relink unless lib changes)
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR)
+
+# Build MLX so that lib exists (won't rebuild unless needed)
+$(MLX_DIR):
+	git clone https://github.com/42Paris/minilibx-linux $(MLX_DIR)
+$(MLX_LIB): $(MLX_DIR)
+	@make -C $(MLX_DIR)
+
+clean_mlx:
+	@if [ -d "$(MLX_DIR)" ]; then make -C $(MLX_DIR) clean; fi
 
 # Clean object files
 clean:
+	@make -C $(LIBFT_DIR) clean
+	@make clean_mlx
 	rm -f $(OBJ)
-	$(MAKE) -C $(LIBFT_DIR) clean
 
-# Full clean
+# Clean everything we own; MLX usually doesn’t have fclean, so call clean
 fclean: clean
+	@make -C $(LIBFT_DIR) fclean
+	rm -rf $(MLX_DIR)
 	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
 
 # Rebuild
 re:
-	$(MAKE) fclean
-	$(MAKE) all
+	@make fclean
+	@make all
+
+# Helper to clean MLX without failing if rule is missing
 
 .PHONY: all clean fclean re
