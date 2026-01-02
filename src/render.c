@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 09:48:20 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/29 11:58:26 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2026/01/02 08:37:02 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	draw_player(t_game *game, int tile_size)
 	}
 }
 
-static void	draw_fov(t_game *game, int tile_size)
+void	draw_fov(t_game *game, int tile_size)
 {
 	int				x;
 	t_ray			ray;
