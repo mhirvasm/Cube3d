@@ -6,7 +6,7 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:05:51 by vahdekiv          #+#    #+#             */
-/*   Updated: 2025/12/31 14:32:08 by vahdekiv         ###   ########.fr       */
+/*   Updated: 2026/01/02 08:54:38 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	parse_and_validate_rgb(t_game *game, char *texture)
 	i = 0;
 	color = -1;
 	rgb = ft_split(texture, ' ');
-	if (!rgb)
+	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 		error_and_exit("Error. ft_split failure", game);
 	while (rgb[i])
 	{

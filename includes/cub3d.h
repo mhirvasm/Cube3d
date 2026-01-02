@@ -201,6 +201,9 @@ void    calculate_wall_dist(t_ray *ray);
 void    draw_walls(t_game *game, int x, t_ray *ray);
 void    raycast(t_game *game);
 void	draw_minimap(t_game *game);
+void	draw_fov(t_game *game, int tile_size);
+int     get_tile_size(t_game *game);
+void	draw_player_dir(t_game *game, int tile_size);
 
 /* ************************************************************************** */
 /* INPUT & MOVEMENT                                                           */

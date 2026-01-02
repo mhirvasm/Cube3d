@@ -6,31 +6,15 @@
 /*   By: mhirvasm <mhirvasm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 12:09:51 by mhirvasm          #+#    #+#             */
-/*   Updated: 2025/12/22 12:33:09 by mhirvasm         ###   ########.fr       */
+/*   Updated: 2026/01/02 09:18:20 by mhirvasm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	raycast(t_game *game)
+static void	get_delta_dist(t_ray *ray)
 {
-	t_ray	ray;
-	int		x;
-
-	ft_bzero(&ray, sizeof(t_ray));
-	x = 0;
-	while (x < WIDTH)
-	{
-		init_ray(&ray, &game->player, x);
-		perform_dda(game, &ray);
-		calculate_wall_dist(&ray);
-		draw_walls(game, x, &ray);
-		x++;
-	}
-}
-static void get_delta_dist(t_ray *ray)
-{
-    if (ray->direction.x == 0)
+	if (ray->direction.x == 0)
 		ray->delta_dist.x = 1e30;
 	else
 		ray->delta_dist.x = fabs(1.0 / ray->direction.x);
@@ -40,9 +24,9 @@ static void get_delta_dist(t_ray *ray)
 		ray->delta_dist.y = fabs(1.0 / ray->direction.y);
 }
 
-static void get_side_dist(t_ray *ray, t_player *player)
+static void	get_side_dist(t_ray *ray, t_player *player)
 {
-    if (ray->direction.x < 0)
+	if (ray->direction.x < 0)
 	{
 		ray->step.x = -1;
 		ray->side_dist.x = (player->pos.x - ray->map.x) * ray->delta_dist.x;
@@ -65,6 +49,7 @@ static void get_side_dist(t_ray *ray, t_player *player)
 			* ray->delta_dist.y;
 	}
 }
+
 void	init_ray(t_ray *ray, t_player *player, int x)
 {
 	double	camera_x;
@@ -75,116 +60,5 @@ void	init_ray(t_ray *ray, t_player *player, int x)
 	ray->map.x = (int)player->pos.x;
 	ray->map.y = (int)player->pos.y;
 	get_delta_dist(ray);
-    get_side_dist(ray, player);
-}
-
-void	perform_dda(t_game *game, t_ray *ray)
-{
-	int	hit;
-
-	hit = 0;
-	while (!!!hit)
-	{
-		if (ray->side_dist.x < ray->side_dist.y)
-		{
-			ray->side_dist.x += ray->delta_dist.x;
-			ray->map.x += ray->step.x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist.y += ray->delta_dist.y;
-			ray->map.y += ray->step.y;
-			ray->side = 1;
-		}
-		if (game->map.grid[ray->map.y][ray->map.x] == '1')
-			hit = 1;
-	}
-}
-
-void	calculate_wall_dist(t_ray *ray)
-{
-	if (ray->side == 0)
-		ray->wall_dist = (ray->side_dist.x - ray->delta_dist.x);
-	else
-		ray->wall_dist = (ray->side_dist.y - ray->delta_dist.y);
-	ray->line_height = (int)(HEIGHT / ray->wall_dist);
-	ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
-	if (ray->draw_start < 0)
-		ray->draw_start = 0;
-	ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
-	if (ray->draw_end >= HEIGHT)
-		ray->draw_end = HEIGHT - 1;
-}
-
-static int	get_texture_index(t_ray *ray)
-{
-	if (ray->side == 0)
-	{
-		if (ray->direction.x < 0)
-			return (WEST);
-		else
-			return (EAST);
-	}
-	else
-	{
-		if (ray->direction.y < 0)
-			return (NORTH);
-		else
-			return (SOUTH);
-	}
-}
-
-static void	init_wall_vars(t_game *game, t_ray *ray, t_wall_vars *v)
-{
-	v->tex_num = get_texture_index(ray);
-	if (ray->side == 0)
-		v->wall_x = game->player.pos.y + ray->wall_dist * ray->direction.y;
-	else
-		v->wall_x = game->player.pos.x + ray->wall_dist * ray->direction.x;
-	v->wall_x -= floor(v->wall_x);
-	v->tex_x = (int)(v->wall_x * (double)game->walls[v->tex_num].width);
-	if ((ray->side == 0 && ray->direction.x > 0)
-		|| (ray->side == 1 && ray->direction.y < 0))
-		v->tex_x = game->walls[v->tex_num].width - v->tex_x - 1;
-	v->step = 1.0 * game->walls[v->tex_num].height / ray->line_height;
-	v->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2)
-		* v->step;
-}
-
-static void	draw_stripe(t_game *game, int x, t_ray *ray, t_wall_vars *v)
-{
-	int		y;
-	int		color;
-	char	*src;
-
-	y = 0;
-	while (y < ray->draw_start)
-	{
-		my_mlx_pixel_put(game, x, y, game->ceiling_color);
-		y++;
-	}
-	while (y < ray->draw_end)
-	{
-		v->tex_y = (int)v->tex_pos & (game->walls[v->tex_num].height - 1);
-		v->tex_pos += v->step;
-		src = game->walls[v->tex_num].addr + (v->tex_y
-				* game->walls[v->tex_num].size_line + v->tex_x
-				* (game->walls[v->tex_num].bpp / 8));
-		color = *(unsigned int *)src;
-		my_mlx_pixel_put(game, x, y, color);
-		y++;
-	}
-	while (y < HEIGHT)
-	{
-		my_mlx_pixel_put(game, x, y++, game->floor_color);
-	}
-}
-
-void	draw_walls(t_game *game, int x, t_ray *ray)
-{
-    t_wall_vars	vars;
-
-	init_wall_vars(game, ray, &vars);
-	draw_stripe(game, x, ray, &vars);
+	get_side_dist(ray, player);
 }
