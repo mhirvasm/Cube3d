@@ -1,9 +1,14 @@
-     NO               ./cactus64.xpm
-SO ./cactus64.xpm
-WE ./cactus64.xpm
-EA ./cactus64.xpm
+     NO               ./textures/cactus64.xpm
+SO ./textures/cactus64.xpm
+WE ./textures/cactus64.xpm
+EA ./textures/cactus64.xpm
 F 0, 255, 255
 C 40, 50, 100
+
+
+            
+
+
 
 1111111111111111
 1000000000000001
@@ -12,3 +17,5 @@ C 40, 50, 100
 1000000000000001
 10000N0000000001
 1111111111111111
+
+
